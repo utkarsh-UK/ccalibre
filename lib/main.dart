@@ -1,4 +1,6 @@
 import 'package:ccalibre/core/theme/theme.dart';
+import 'package:ccalibre/presentation/screens/home/binding.dart';
+import 'package:ccalibre/presentation/screens/home/view.dart';
 import 'package:ccalibre/presentation/screens/onboard/bindings.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,8 @@ void main() async {
   // await Get.putAsync(() => StorageService().init());
   // DependencyInjector().inject();
 
+  HomeBinding().dependencies();
+  
   runApp(const MyApp());
 }
 
@@ -26,8 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'CCalibre',
       debugShowCheckedModeBanner: false,
       theme: ApplicationTheme.getAppThemeData(),
-      home: const UploadToken(),
-      initialBinding:  OnboardBinding(),
+      home: HomeScreen(),
     );
   }
 }

@@ -13,10 +13,10 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: size.height - kToolbarHeight,
-            width: size.width,
+        child: SizedBox(
+          height: size.height - kToolbarHeight,
+          width: size.width,
+          child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 4.0.wp,

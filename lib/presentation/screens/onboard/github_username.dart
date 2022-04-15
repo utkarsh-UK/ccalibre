@@ -106,6 +106,6 @@ class GithubUsername extends StatelessWidget {
   }
 
   void _redirectToHome() {
-    Get.to(() => const HomeScreen());
+    Get.to(() => HomeScreen());
   }
 }
