@@ -25,6 +25,10 @@ dependencies:
   #ui
   font_awesome_flutter: ^10.1.0
 
+  #device
+  file_picker: ^4.5.1
+  flutter_secure_storage: ^5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
