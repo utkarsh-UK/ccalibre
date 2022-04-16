@@ -1,8 +1,8 @@
 import 'package:ccalibre/core/theme/colors.dart';
-import 'package:ccalibre/presentation/screens/home/view.dart';
+import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/presentation/screens/onboard/controller.dart';
-import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/screens/onboard/widgets/onboard_scaffold.dart';
+import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -106,6 +106,6 @@ class GithubUsername extends StatelessWidget {
   }
 
   void _redirectToHome() {
-    Get.to(() => HomeScreen());
+    Get.offAllNamed(Routes.homeRoute);
   }
 }

@@ -12,8 +12,10 @@ const Color primaryButtonTextColor = Color(0xFFFFFFFF);
 
 const Color backgroundColor = Color(0xFFFFFFFF);
 const Color iconColor = Color(0xFF0c0000);
+const Color iconBackgroundColor = Color(0xFFC0D4FF);
 const Color borderColor = Color(0xFFeeeeee);
 
+const Color cardTitleLightColor = Color(0xFFDDDDDD);
 const Color cardBackgroundRedColor = Color(0xFFFC8EA4);
 const Color cardBackgroundYellowColor = Color(0xFFFCC48B);
 const Color cardBackgroundGreenColor = Color(0xFF6bcb77);

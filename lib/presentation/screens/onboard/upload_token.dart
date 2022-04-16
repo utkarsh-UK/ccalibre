@@ -1,9 +1,9 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/constants.dart';
+import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/presentation/screens/onboard/controller.dart';
-import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
-import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/screens/onboard/widgets/onboard_scaffold.dart';
+import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -128,7 +128,7 @@ class UploadToken extends StatelessWidget {
             'Your token will be stored securely in this device. If you uninstall the application, token will also get deleted. Click Next to proceed.',
         onPrimaryBtnClick: () {
           Get.back();
-          Get.to(() => GithubUsername());
+          Get.toNamed(Routes.githubUsernameRoute);
         });
   }
 }

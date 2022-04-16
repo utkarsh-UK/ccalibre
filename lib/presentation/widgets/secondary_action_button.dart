@@ -24,9 +24,9 @@ class SecondaryActionButton extends StatelessWidget {
           backgroundColor: Colors.white,
           padding: EdgeInsets.only(
             right: 4.0.wp,
-            top: 4.0.wp,
-            bottom: 4.0.wp,
-            left: 0.0.wp,
+            top: 3.0.wp,
+            bottom: 3.0.wp,
+            left: 4.0.wp,
           ),
           side: const BorderSide(color: primaryColor, width: 1.0),
           shape: RoundedRectangleBorder(

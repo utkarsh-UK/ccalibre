@@ -32,7 +32,7 @@ class PrimaryActionButton extends StatelessWidget {
             left: 0.0.wp,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(iconData == null ? 20.0 : 12.0),
+            borderRadius: BorderRadius.circular(20.0),
           ),
         ),
         icon: iconData == null

@@ -75,7 +75,7 @@ class ApplicationTheme {
             fontFamily: 'Roboto',
           ),
           button: TextStyle(
-            fontSize: 16.0.sp,
+            fontSize: 14.0.sp,
             fontWeight: FontWeight.w600,
             color: primaryTextColor,
             fontFamily: 'Roboto',
