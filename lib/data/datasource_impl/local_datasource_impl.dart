@@ -1,18 +1,34 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:ccalibre/core/utils/constants.dart';
+import 'package:ccalibre/core/utils/exceptions.dart';
 import 'package:ccalibre/data/datasources/local_datasource.dart';
 import 'package:ccalibre/data/models/user_model.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ccalibre/data/services/storage_service.dart';
 
-class LocaDatasourceImpl extends LocalDatasource {
-  final FlutterSecureStorage _secureStorage;
+class LocalDatasourceImpl extends LocalDatasource {
+  final SecuredStorageService _securedStorageService;
 
-  LocaDatasourceImpl(this._secureStorage);
+  LocalDatasourceImpl(this._securedStorageService);
 
   @override
-  Future<UserModel> storeUserData(File file, String username) {
-    // TODO: implement storeUserData
-    throw UnimplementedError();
+  Future<UserModel> storeUserData(File file, String username) async {
+    try {
+      final String fileContents = file.readAsStringSync();
+      final String token = fileContents.trim();
+      final user = UserModel.fromRaw(token, username);
+
+      await _securedStorageService.writeSecured(
+        Constants.apiTokenKey,
+        jsonEncode(user),
+      );
+
+      return user;
+    } on FileSystemException {
+      throw LocalException(message: 'Error while reading file');
+    } catch (e) {
+      throw LocalException(message: e.toString());
+    }
   }
 }

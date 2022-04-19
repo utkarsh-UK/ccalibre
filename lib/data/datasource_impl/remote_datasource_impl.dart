@@ -1,6 +1,7 @@
+import 'package:ccalibre/core/utils/exceptions.dart';
 import 'package:ccalibre/data/datasources/remote_datasource.dart';
-import 'package:ccalibre/data/models/build_model.dart';
 import 'package:ccalibre/data/models/application_model.dart';
+import 'package:ccalibre/data/models/build_model.dart';
 import 'package:dio/dio.dart';
 
 class RemoteDatasourceImpl extends RemoteDatasource {
@@ -39,9 +40,26 @@ class RemoteDatasourceImpl extends RemoteDatasource {
   }
 
   @override
-  Future<List<ApplicationModel>> getAllApplications(String token) {
-    // TODO: implement getAllApplications
-    throw UnimplementedError();
+  Future<List<ApplicationModel>> getAllApplications(String token) async {
+    try {
+
+      final response = await _dio.get(
+        '/apps',
+        options: Options(headers: {'x-auth-token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data as Map<String, dynamic>;
+
+        return (data['applications'] as List<dynamic>)
+            .map<ApplicationModel>((app) => ApplicationModel.fromJSON(app))
+            .toList();
+      } else {
+        throw ServerException(message: response.statusMessage!);
+      }
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override

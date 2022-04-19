@@ -14,16 +14,16 @@ abstract class ApplicationRepository {
 
   Future<Either<Failure, List<Build>>> getAllBuilds(
     String token, {
-    String applicationID,
-    String workflowID,
-    String branch,
+    String? applicationID,
+    String? workflowID,
+    String? branch,
   });
 
   Future<Either<Failure, void>> startNewBuild(
     String token, {
     required String applicationID,
     required String workflowID,
-    String branch,
+    String? branch,
   });
 
   Future<Either<Failure, bool>> cancelBuild(String token,
@@ -40,7 +40,7 @@ abstract class ApplicationRepository {
     required String value,
     required String workflowID,
     required String applicationID,
-    String group,
+    String? group,
   });
 
   Future<Either<Failure, void>> updateVariable(

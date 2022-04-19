@@ -1,6 +1,7 @@
 import 'package:ccalibre/core/theme/theme.dart';
 import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/data/services/storage_service.dart';
+import 'package:ccalibre/di/injection.dart';
 import 'package:ccalibre/presentation/screens/home/applications/application_details.dart';
 import 'package:ccalibre/presentation/screens/home/binding.dart';
 import 'package:ccalibre/presentation/screens/home/view.dart';
@@ -15,7 +16,7 @@ import 'package:get_storage/get_storage.dart';
 void main() async {
   await GetStorage.init();
   await Get.putAsync(() => SecuredStorageService().init());
-  // DependencyInjector().inject();
+  DependencyInjector.inject();
 
   runApp(const MyApp());
 }

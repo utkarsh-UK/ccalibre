@@ -120,15 +120,19 @@ class UploadToken extends StatelessWidget {
   void _onFileChoseClick(BuildContext context) {
     final controller = Get.find<OnboardController>();
 
-    controller.showDialog(
-        context: context,
-        title: 'Token Retrieved',
-        primaryBtnText: 'Next',
-        message:
-            'Your token will be stored securely in this device. If you uninstall the application, token will also get deleted. Click Next to proceed.',
-        onPrimaryBtnClick: () {
-          Get.back();
-          Get.toNamed(Routes.githubUsernameRoute);
-        });
+    controller.pickTextFileFromDevice().then((shallProceed) {
+      if (shallProceed) {
+        controller.showDialog(
+            context: context,
+            title: 'Token Retrieved',
+            primaryBtnText: 'Next',
+            message:
+                'Your token will be stored securely in this device. If you uninstall the application, token will also get deleted. Click Next to proceed.',
+            onPrimaryBtnClick: () {
+              Get.back();
+              Get.toNamed(Routes.githubUsernameRoute);
+            });
+      }
+    });
   }
 }

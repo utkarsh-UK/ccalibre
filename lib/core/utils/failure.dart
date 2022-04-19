@@ -14,3 +14,13 @@ class ServerFailure extends Failure with EquatableMixin {
   @override
   List<Object> get props => [message];
 }
+
+/// Handles [LocalException] and return Failure object to UI elements.
+class LocalFailure extends Failure with EquatableMixin {
+  final String message;
+
+  LocalFailure({this.message = 'Some unexpected server failure occured!'}) : super([message]);
+
+  @override
+  List<Object> get props => [message];
+}

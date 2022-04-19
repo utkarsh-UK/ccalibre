@@ -30,20 +30,20 @@ class Applications extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
+            itemCount: _homeController.applications.length,
             separatorBuilder: (_, __) =>
                 const Divider(color: Color(0xFF16182C), thickness: 1.2),
             itemBuilder: (_, index) => ListTile(
               onTap: () => Get.toNamed(Routes.applicationDetailsRoute),
               title: Text(
-                'Persuit-Mobile',
+                _homeController.applications[index].name,
                 style: textTheme.headline6!.copyWith(
                   fontSize: 14.0.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               subtitle: Text(
-                '2 workflows',
+                '${_homeController.applications[index].workflows.length} workflows',
                 style: textTheme.subtitle2!.copyWith(
                   fontSize: 12.0.sp,
                   height: 2.0,

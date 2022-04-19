@@ -105,7 +105,12 @@ class GithubUsername extends StatelessWidget {
     );
   }
 
-  void _redirectToHome() {
-    Get.offAllNamed(Routes.homeRoute);
+  void _redirectToHome() async {
+    final onboardController = Get.find<OnboardController>();
+
+    await onboardController.storeTokenAndUsername().then((_) {
+      
+      Get.offAllNamed(Routes.homeRoute);
+    });
   }
 }

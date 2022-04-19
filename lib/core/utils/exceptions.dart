@@ -8,3 +8,14 @@ class ServerException implements Exception {
     this.message = 'Could not process your request at the moment.',
   });
 }
+
+/// Custom class to catch LocalExceptions.
+/// 
+/// [message] field provides reason of the exception in short.
+class LocalException implements Exception {
+  final String message;
+
+  LocalException({
+    this.message = 'Could not process your request at the moment.',
+  });
+}

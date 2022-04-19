@@ -27,10 +27,10 @@ class SecuredStorageService extends GetxService {
   }
 
   Future<void> writeSecured<T>(String key, String value) async {
-    return await _secureStorage.write(key: key, value: value);
+    return _secureStorage.write(key: key, value: value);
   }
 
   Future<String?> readSecured(String key) async {
-    return await _secureStorage.read(key: key);
+    return _secureStorage.read(key: key);
   }
 }
