@@ -1,6 +1,7 @@
 // ignore_for_file: annotate_overrides, overridden_fields
 
 import 'package:ccalibre/domain/entities/build.dart';
+import 'package:flutter/cupertino.dart';
 
 class BuildModel extends Build {
   final String id;
@@ -41,8 +42,10 @@ class BuildModel extends Build {
         branch: '${json['branch']}',
         version: '${json['version']}',
         status: '${json['status']}',
-        startedAt: DateTime.parse('${json['started_at']}'),
-        finishedAt: DateTime.parse('${json['finished_at']}'),
+        startedAt:
+            DateTime.parse('${json['startedAt']}'.split('.').first + '+0000'),
+        finishedAt:
+            DateTime.parse('${json['finishedAt']}'.split('.').first + '+0000'),
         instanceType: '${json['instanceType'] ?? 'mac_mini'}',
       );
 }

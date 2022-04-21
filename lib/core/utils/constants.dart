@@ -12,4 +12,6 @@ class Constants {
       'To know how to get Codemagic API token,';
   static const String addYamlFileNote =
       'In order to use codemagic.yaml for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be codemagic.yaml and it must be located in the root directory of the repository.';
+  static const String tokenRetrievedMessage =
+      'Your token will be stored securely in this device. If you uninstall the application, token will also get deleted. Click Next to proceed.';
 }

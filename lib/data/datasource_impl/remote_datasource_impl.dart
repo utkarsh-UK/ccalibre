@@ -1,4 +1,5 @@
 import 'package:ccalibre/core/utils/exceptions.dart';
+import 'package:ccalibre/core/utils/helpers.dart';
 import 'package:ccalibre/data/datasources/remote_datasource.dart';
 import 'package:ccalibre/data/models/application_model.dart';
 import 'package:ccalibre/data/models/build_model.dart';
@@ -42,21 +43,18 @@ class RemoteDatasourceImpl extends RemoteDatasource {
   @override
   Future<List<ApplicationModel>> getAllApplications(String token) async {
     try {
-
-      final response = await _dio.get(
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.get,
         '/apps',
-        options: Options(headers: {'x-auth-token': token}),
+        headers: {'x-auth-token': token},
       );
 
-      if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
-
-        return (data['applications'] as List<dynamic>)
-            .map<ApplicationModel>((app) => ApplicationModel.fromJSON(app))
-            .toList();
-      } else {
-        throw ServerException(message: response.statusMessage!);
-      }
+      return (response!['applications'] as List<dynamic>)
+          .map<ApplicationModel>((app) => ApplicationModel.fromJSON(app))
+          .toList();
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -64,9 +62,24 @@ class RemoteDatasourceImpl extends RemoteDatasource {
 
   @override
   Future<List<BuildModel>> getAllBuilds(String token,
-      {String? applicationID, String? workflowID, String? branch}) {
-    // TODO: implement getAllBuilds
-    throw UnimplementedError();
+      {String? applicationID, String? workflowID, String? branch}) async {
+    try {
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.get,
+        '/builds',
+        headers: {'x-auth-token': token},
+      );
+
+
+      return (response!['builds'] as List<dynamic>)
+          .map<BuildModel>((app) => BuildModel.fromJSON(app))
+          .toList();
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override

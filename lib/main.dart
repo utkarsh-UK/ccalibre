@@ -8,6 +8,7 @@ import 'package:ccalibre/presentation/screens/home/view.dart';
 import 'package:ccalibre/presentation/screens/onboard/bindings.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
+import 'package:ccalibre/presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -38,8 +39,12 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: Routes.initialRoute,
-          page: () => const UploadToken(),
+          page: () => const SplashScreen(),
           binding: OnboardBinding(),
+        ),
+        GetPage(
+          name: Routes.uploadTokenRoute,
+          page: () => const UploadToken(),
         ),
         GetPage(name: Routes.githubUsernameRoute, page: () => GithubUsername()),
         GetPage(

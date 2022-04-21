@@ -124,10 +124,9 @@ class UploadToken extends StatelessWidget {
       if (shallProceed) {
         controller.showDialog(
             context: context,
-            title: 'Token Retrieved',
+            title: 'Token Retrieval',
             primaryBtnText: 'Next',
-            message:
-                'Your token will be stored securely in this device. If you uninstall the application, token will also get deleted. Click Next to proceed.',
+            message: Constants.tokenRetrievedMessage,
             onPrimaryBtnClick: () {
               Get.back();
               Get.toNamed(Routes.githubUsernameRoute);

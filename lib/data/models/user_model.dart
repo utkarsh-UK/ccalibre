@@ -15,6 +15,11 @@ class UserModel extends User {
   @override
   List<Object?> get props => [token, githubUsername];
 
+  factory UserModel.fromJSON(Map<String, dynamic> json) => UserModel(
+        token: json['token'],
+        githubUsername: json['username'],
+      );
+
   factory UserModel.fromRaw(String token, String username) => UserModel(
         token: token,
         githubUsername: username,

@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
         SizedBox(height: 6.0.wp),
         Obx(
           () => _homeController.areApplicationsAdded.value
-              ? const BuildHistory()
+              ?  BuildHistory()
               : const EmptyApps(),
         ),
         SizedBox(height: 6.0.wp),

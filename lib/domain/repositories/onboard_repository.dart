@@ -6,4 +6,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class OnboardRepository {
   Future<Either<Failure, User>> storeUserData(File file, String username);
+
+  Future<Either<Failure, User?>> getUserData();
 }

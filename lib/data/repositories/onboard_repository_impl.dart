@@ -21,4 +21,13 @@ class OnboardRepositoryImpl extends OnboardRepository {
       return Left(LocalFailure(message: e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, User?>> getUserData() async {
+    try {
+      return Right(await _localDatasource.getUserData());
+    } on LocalException catch (e) {
+      return Left(LocalFailure(message: e.message));
+    }
+  }
 }

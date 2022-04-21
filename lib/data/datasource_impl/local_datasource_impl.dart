@@ -31,4 +31,21 @@ class LocalDatasourceImpl extends LocalDatasource {
       throw LocalException(message: e.toString());
     }
   }
+
+  @override
+  Future<UserModel?> getUserData() async {
+    try {
+      final String? userDataString =
+          await _securedStorageService.readSecured(Constants.apiTokenKey);
+
+      if (userDataString == null) return null;
+
+      final Map<String, dynamic> parsedUser =
+          jsonDecode(userDataString) as Map<String, dynamic>;
+
+      return UserModel.fromJSON(parsedUser);
+    } catch (e) {
+      throw LocalException(message: e.toString());
+    }
+  }
 }

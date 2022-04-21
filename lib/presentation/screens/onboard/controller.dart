@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:ccalibre/core/usecases/usecase.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
+import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/domain/entities/user.dart';
+import 'package:ccalibre/domain/usecases/onboard/get_user_data.dart';
 import 'package:ccalibre/domain/usecases/onboard/store_user_data.dart';
 import 'package:ccalibre/presentation/widgets/dialog_animation_wrapper.dart';
 import 'package:ccalibre/presentation/widgets/message_dialog.dart';
@@ -12,8 +14,13 @@ import 'package:get/get.dart';
 
 class OnboardController extends GetxController {
   final StoreUserData _storeUserData;
+  final GetUserData _getUserData;
 
-  OnboardController(this._storeUserData);
+  OnboardController({
+    required StoreUserData storeUserData,
+    required GetUserData getUserData,
+  })  : _storeUserData = storeUserData,
+        _getUserData = getUserData;
 
   late final TextEditingController controller;
 
@@ -26,6 +33,14 @@ class OnboardController extends GetxController {
     super.onInit();
 
     controller = TextEditingController();
+
+    ever(storedUser, (updatedUser) {
+      if (updatedUser != null) {
+        Get.toNamed(Routes.homeRoute);
+      } else {
+        Get.toNamed(Routes.uploadTokenRoute);
+      }
+    });
   }
 
   @override
@@ -33,6 +48,34 @@ class OnboardController extends GetxController {
     super.onClose();
 
     controller.dispose();
+  }
+
+  Future<void> storeTokenAndUsername() async {
+    if (tokenFile.value == null) {
+      // File is not selected. return.
+      return;
+    }
+
+    final failureOrUser = await _storeUserData(Params(
+        tokenFile: tokenFile.value, githubUsername: controller.text.trim()));
+
+    failureOrUser.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToString(failure);
+      },
+      (user) => storedUser.value = user,
+    );
+  }
+
+  Future<void> getUserData() async {
+    final failureOrUser = await _getUserData(NoParams());
+
+    failureOrUser.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToString(failure);
+      },
+      (user) => storedUser.value = user,
+    );
   }
 
   Future<T?> showDialog<T>({
@@ -72,22 +115,5 @@ class OnboardController extends GetxController {
     tokenFile.value = File(result.files.first.path!);
 
     return true;
-  }
-
-  Future<void> storeTokenAndUsername() async {
-    if (tokenFile.value == null) {
-      // File is not selected. return.
-      return;
-    }
-
-    final failureOrUser = await _storeUserData(Params(
-        tokenFile: tokenFile.value, githubUsername: controller.text.trim()));
-
-    failureOrUser.fold(
-      (failure) {
-        errorMessage.value = Helpers.convertFailureToString(failure);
-      },
-      (user) => storedUser.value = user,
-    );
   }
 }

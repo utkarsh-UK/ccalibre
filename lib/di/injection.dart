@@ -17,6 +17,7 @@ import 'package:ccalibre/domain/usecases/builds/cancel_build.dart';
 import 'package:ccalibre/domain/usecases/builds/get_all_builds.dart';
 import 'package:ccalibre/domain/usecases/builds/get_build_status.dart';
 import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
+import 'package:ccalibre/domain/usecases/onboard/get_user_data.dart';
 import 'package:ccalibre/domain/usecases/onboard/store_user_data.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -87,5 +88,6 @@ class DependencyInjector {
     final onboardRepository = Get.find<OnboardRepository>();
 
     Get.lazyPut<StoreUserData>(() => StoreUserData(onboardRepository));
+    Get.lazyPut<GetUserData>(() => GetUserData(onboardRepository));
   }
 }
