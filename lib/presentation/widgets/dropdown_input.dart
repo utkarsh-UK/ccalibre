@@ -5,16 +5,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DropdownInput extends StatelessWidget {
   final List<String> values;
+  final Function(String?)? onDropdownChanged;
 
-  const DropdownInput({Key? key, required this.values}) : super(key: key);
+  const DropdownInput({
+    Key? key,
+    required this.values,
+    this.onDropdownChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    
+
     return DropdownButtonFormField<String>(
       value: values.first,
-      onChanged: (value) {},
+      onChanged: onDropdownChanged,
       items: values
           .map<DropdownMenuItem<String>>((item) => DropdownMenuItem(
                 child: Text(item),

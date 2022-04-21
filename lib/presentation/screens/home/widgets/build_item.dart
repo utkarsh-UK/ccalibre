@@ -46,7 +46,9 @@ class RoundedCard extends StatelessWidget {
         children: [
           TextButton.icon(
             onPressed: null,
-            style: TextButton.styleFrom(),
+            style: TextButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
             icon: FaIcon(
               titleIcon,
               size: 4.0.wp,

@@ -1,5 +1,5 @@
 import 'package:ccalibre/core/utils/exceptions.dart';
-import 'package:ccalibre/data/datasources/remote_datasource.dart';
+import 'package:ccalibre/data/datasources/application_remote_datasource.dart';
 import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/entities/application.dart';
 import 'package:ccalibre/core/utils/failure.dart';
@@ -7,7 +7,7 @@ import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class ApplicationRepositoryImpl extends ApplicationRepository {
-  final RemoteDatasource _remoteDatasource;
+  final ApplicationRemoteDatasource _remoteDatasource;
 
   ApplicationRepositoryImpl(this._remoteDatasource);
 

@@ -1,7 +1,7 @@
 import 'package:ccalibre/data/models/application_model.dart';
 import 'package:ccalibre/data/models/build_model.dart';
 
-abstract class RemoteDatasource {
+abstract class ApplicationRemoteDatasource {
   Future<List<ApplicationModel>> getAllApplications(String token);
 
   Future<ApplicationModel> getApplication(String token, String applicationID);

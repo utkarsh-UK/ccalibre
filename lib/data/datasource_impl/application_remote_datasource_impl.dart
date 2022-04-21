@@ -1,14 +1,14 @@
 import 'package:ccalibre/core/utils/exceptions.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
-import 'package:ccalibre/data/datasources/remote_datasource.dart';
+import 'package:ccalibre/data/datasources/application_remote_datasource.dart';
 import 'package:ccalibre/data/models/application_model.dart';
 import 'package:ccalibre/data/models/build_model.dart';
 import 'package:dio/dio.dart';
 
-class RemoteDatasourceImpl extends RemoteDatasource {
+class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   final Dio _dio;
 
-  RemoteDatasourceImpl(this._dio);
+  ApplicationRemoteDatasourceImpl(this._dio);
 
   @override
   Future<void> addVariable(String token,

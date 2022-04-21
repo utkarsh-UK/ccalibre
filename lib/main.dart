@@ -9,6 +9,7 @@ import 'package:ccalibre/presentation/screens/onboard/bindings.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
 import 'package:ccalibre/presentation/screens/splash/splash_screen.dart';
+import 'package:ccalibre/presentation/screens/user/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: Routes.homeRoute,
           page: () => HomeScreen(),
-          binding: HomeBinding(),
+          bindings: [
+            HomeBinding(),
+            UserBinding(),
+          ]
         ),
         GetPage(
           name: Routes.applicationDetailsRoute,

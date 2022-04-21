@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 const Color primaryColor = Color(0xFF0a58ff);
 const Color accentColor = Color(0xFFf99b3d);
 const Color logoRedColor = Color(0xFFed1843);
+const Color logoGreenColor = Color(0xFF6BCB77);
 
 const Color primaryTextColor = Color(0xFF16182c);
 const Color bodyTextColor = Color(0xFF999999);

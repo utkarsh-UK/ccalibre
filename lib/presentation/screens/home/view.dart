@@ -4,6 +4,7 @@ import 'package:ccalibre/presentation/screens/home/applications/applications.dar
 import 'package:ccalibre/presentation/screens/home/builds/build_history.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/empty_apps.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/live_build_status.dart';
+import 'package:ccalibre/presentation/screens/user/controller.dart';
 import 'package:ccalibre/presentation/widgets/app_scaffold.dart';
 import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/secondary_action_button.dart';
@@ -35,8 +36,8 @@ class HomeScreen extends StatelessWidget {
         SizedBox(height: 6.0.wp),
         Obx(
           () => _homeController.areApplicationsAdded.value
-              ?  BuildHistory()
-              : const EmptyApps(),
+              ? BuildHistory()
+              : const SizedBox.shrink(),
         ),
         SizedBox(height: 6.0.wp),
         Obx(
@@ -45,8 +46,14 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
                   child: SecondaryActionButton(
                     label: 'Create New Application',
-                    onClick: () =>
-                        _homeController.showAddApplicationSheet(context),
+                    onClick: () {
+                      final _userController = Get.find<UserController>();
+                      _userController.getPublicRepositories(
+                        _homeController.storedUser.value!.githubUsername,
+                      );
+                      
+                      _homeController.showAddApplicationSheet(context);
+                    },
                   ),
                 )
               : Container(

@@ -1,12 +1,16 @@
 import 'package:ccalibre/data/datasource_impl/local_datasource_impl.dart';
-import 'package:ccalibre/data/datasource_impl/remote_datasource_impl.dart';
+import 'package:ccalibre/data/datasource_impl/application_remote_datasource_impl.dart';
+import 'package:ccalibre/data/datasource_impl/user_remote_datasource_impl.dart';
 import 'package:ccalibre/data/datasources/local_datasource.dart';
-import 'package:ccalibre/data/datasources/remote_datasource.dart';
+import 'package:ccalibre/data/datasources/application_remote_datasource.dart';
+import 'package:ccalibre/data/datasources/user_remote_datasource.dart';
 import 'package:ccalibre/data/repositories/application_repository_impl.dart';
 import 'package:ccalibre/data/repositories/onboard_repository_impl.dart';
+import 'package:ccalibre/data/repositories/user_repository_impl.dart';
 import 'package:ccalibre/data/services/storage_service.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:ccalibre/domain/repositories/onboard_repository.dart';
+import 'package:ccalibre/domain/repositories/user_repository.dart';
 import 'package:ccalibre/domain/usecases/applications/add_variable.dart';
 import 'package:ccalibre/domain/usecases/applications/create_new_app.dart';
 import 'package:ccalibre/domain/usecases/applications/delete_variable.dart';
@@ -19,6 +23,7 @@ import 'package:ccalibre/domain/usecases/builds/get_build_status.dart';
 import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
 import 'package:ccalibre/domain/usecases/onboard/get_user_data.dart';
 import 'package:ccalibre/domain/usecases/onboard/store_user_data.dart';
+import 'package:ccalibre/domain/usecases/user/get_public_repos.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +38,7 @@ class DependencyInjector {
     _injectApplicationUsecases();
     _injectBuildUsecases();
     _injectOnboardUsecases();
+    _injectUserUsecases();
   }
 
   static void _injectExternalDependencies() {
@@ -47,17 +53,23 @@ class DependencyInjector {
     final dio = Get.find<Dio>();
     final securedStorageService = Get.find<SecuredStorageService>();
 
-    Get.lazyPut<RemoteDatasource>(() => RemoteDatasourceImpl(dio));
+    Get.lazyPut<ApplicationRemoteDatasource>(
+        () => ApplicationRemoteDatasourceImpl(dio));
+
+    Get.lazyPut<UserRemoteDatasource>(
+        () => UserRemoteDatasourceImpl(dio));
     Get.lazyPut<LocalDatasource>(
         () => LocalDatasourceImpl(securedStorageService));
   }
 
   static void _injectRepositories() {
-    final remoteDatasource = Get.find<RemoteDatasource>();
+    final appRemoteDatasource = Get.find<ApplicationRemoteDatasource>();
+    final userRemoteDatasource = Get.find<UserRemoteDatasource>();
     final localDatasource = Get.find<LocalDatasource>();
 
     Get.lazyPut<ApplicationRepository>(
-        () => ApplicationRepositoryImpl(remoteDatasource));
+        () => ApplicationRepositoryImpl(appRemoteDatasource));
+    Get.lazyPut<UserRepository>(() => UserRepositoryImpl(userRemoteDatasource));
     Get.lazyPut<OnboardRepository>(
         () => OnboardRepositoryImpl(localDatasource));
   }
@@ -89,5 +101,11 @@ class DependencyInjector {
 
     Get.lazyPut<StoreUserData>(() => StoreUserData(onboardRepository));
     Get.lazyPut<GetUserData>(() => GetUserData(onboardRepository));
+  }
+
+  static void _injectUserUsecases() {
+    final userRepository = Get.find<UserRepository>();
+
+    Get.lazyPut<GetPublicRepos>(() => GetPublicRepos(userRepository));
   }
 }

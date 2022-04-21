@@ -17,9 +17,13 @@ class Helpers {
   }
 
   static Future<Map<String, dynamic>?> sendRequest(
-      Dio dio, HttpRequestType type, String path,
-      {Map<String, dynamic>? queryParams,
-      Map<String, dynamic>? headers}) async {
+    Dio dio,
+    HttpRequestType type,
+    String path, {
+    Map<String, dynamic>? queryParams,
+    Map<String, dynamic>? headers,
+    bool isResponseListType = false,
+  }) async {
     try {
       Response _response;
 
@@ -45,6 +49,9 @@ class Helpers {
       }
 
       if (_response.statusCode == 200) {
+        // Response is of List Type. Convert to Map with added key [data].
+        if (isResponseListType) return {'data': _response.data};
+
         return _response.data as Map<String, dynamic>;
       } else {
         throw ServerException(message: _response.statusMessage!);

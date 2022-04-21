@@ -87,7 +87,7 @@ class HomeController extends GetxController {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      builder: (_) => const AddAppSheet(),
+      builder: (_) => AddAppSheet(),
     );
   }
 

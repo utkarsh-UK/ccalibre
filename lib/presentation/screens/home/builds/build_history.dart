@@ -6,6 +6,8 @@ import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/utils/extensions.dart';
+
 class BuildHistory extends StatelessWidget {
   final HomeController _homeController = Get.find<HomeController>();
 
@@ -33,10 +35,15 @@ class BuildHistory extends StatelessWidget {
               separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
               itemBuilder: (_, index) {
                 final build = _homeController.builds[index];
+                final isFinished = build.status == 'finished';
+                final timeDiff = isFinished
+                    ? build.finishedAt.timeAgo()
+                    : build.startedAt.timeAgo();
+                final timeStatus = isFinished ? 'Finished' : 'Started';
 
                 return RoundedCard(
                   cardTitle: build.branch.toLowerCase(),
-                  footerText: 'Started 5m 48s ago',
+                  footerText: '$timeStatus $timeDiff ago',
                   centerChild: Align(
                     alignment: Alignment.center,
                     child: RichText(
@@ -45,14 +52,14 @@ class BuildHistory extends StatelessWidget {
                           TextSpan(
                             text: '${build.status}\n'.toUpperCase(),
                             style: textTheme.headline5!.copyWith(
-                              color: logoRedColor,
+                              color: isFinished ? logoRedColor : logoGreenColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
                             text: 'with 2 artefacts',
                             style: textTheme.button!.copyWith(
-                              color: logoRedColor,
+                              color: isFinished ? logoRedColor : logoGreenColor,
                               fontSize: 10.0.sp,
                               height: 1.2,
                               fontWeight: FontWeight.w400,

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ccalibre/core/usecases/user_params.dart';
 import 'package:ccalibre/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -25,6 +26,8 @@ class Params extends Equatable {
   final String? githubUsername;
   final File? tokenFile;
 
+  final UserParams userParams;
+
   const Params({
     this.token,
     this.user,
@@ -35,6 +38,7 @@ class Params extends Equatable {
     this.githubUsername,
     this.variableKey,
     this.variableValue,
+    this.userParams = const UserParams(),
   });
 
   @override

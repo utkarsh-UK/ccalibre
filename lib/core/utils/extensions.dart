@@ -28,3 +28,31 @@ extension FileSize on int {
     return ((this / pow(1024, i)).toStringAsFixed(2)) + ' ' + suffixes[i];
   }
 }
+
+/// Returns time difference in ago format
+extension DateTimeExtension on DateTime {
+  String timeAgo({bool numericDates = false}) {
+    final date2 = DateTime.now();
+    final difference = date2.difference(this);
+
+    if ((difference.inDays / 7).floor() >= 1) {
+      return (numericDates) ? '1 week ago' : 'a week';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays >= 1) {
+      return (numericDates) ? '1 day ago' : 'yesterday';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inHours >= 1) {
+      return (numericDates) ? '1 hour ago' : 'an hour ago';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inMinutes >= 1) {
+      return (numericDates) ? '1 minute ago' : 'a minute ago';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds} seconds ago';
+    } else {
+      return 'Just now';
+    }
+  }
+}
