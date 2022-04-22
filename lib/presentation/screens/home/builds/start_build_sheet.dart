@@ -1,8 +1,8 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
 import 'package:ccalibre/domain/entities/application.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
-import 'package:ccalibre/presentation/screens/user/controller.dart';
+import 'package:ccalibre/presentation/getx/build/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:ccalibre/presentation/widgets/dropdown_input.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';
 import 'package:ccalibre/presentation/widgets/text_input_field.dart';
@@ -12,11 +12,18 @@ import 'package:get/get.dart';
 
 class StartBuildSheet extends StatelessWidget {
   final Application application;
+  final bool shouldPresetWorkflow;
+  final String? selectedWorkflow;
 
-  StartBuildSheet({Key? key, required this.application}) : super(key: key);
+  StartBuildSheet({
+    Key? key,
+    required this.application,
+    this.shouldPresetWorkflow = false,
+    this.selectedWorkflow = 'Select Workflow',
+  }) : super(key: key);
 
-  final HomeController _homeController = Get.find<HomeController>();
   final UserController _userController = Get.find<UserController>();
+  final BuildController _buildController = Get.find<BuildController>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +44,14 @@ class StartBuildSheet extends StatelessWidget {
           ),
           SizedBox(height: 4.0.wp),
           DropdownInput(
-            values:
-                application.workflows.map<String>((work) => work.name).toList()
-                  ..insert(0, 'Select Workflow'),
-            onDropdownChanged: _onWorkflowDropDownChanged,
+            values: shouldPresetWorkflow
+                ? [selectedWorkflow!]
+                : (application.workflows
+                    .map<String>((work) => work.name)
+                    .toList()
+                  ..insert(0, 'Select Workflow')),
+            onDropdownChanged:
+                shouldPresetWorkflow ? null : _onWorkflowDropDownChanged,
           ),
           SizedBox(height: 4.0.wp),
           DropdownInput(
@@ -117,7 +128,7 @@ class StartBuildSheet extends StatelessWidget {
 
     if (selectedWorkID.isEmpty || selectedBranch.isEmpty) return;
 
-    _homeController
+    _buildController
         .startBuild(application.id, selectedWorkID, selectedBranch)
         .then((_) => Get.back());
   }

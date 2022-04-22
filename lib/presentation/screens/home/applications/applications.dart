@@ -1,7 +1,8 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
 import 'package:ccalibre/core/utils/routes.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
+import 'package:ccalibre/presentation/getx/build/controller.dart';
+import 'package:ccalibre/presentation/getx/home/controller.dart';
 import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,6 +76,7 @@ class Applications extends StatelessWidget {
 
   void _onAppClick(String appID) {
     _homeController.getApplication(appID);
+    Get.find<BuildController>().getBuildsForApplication(appID);
     Get.toNamed(Routes.applicationDetailsRoute);
   }
 }

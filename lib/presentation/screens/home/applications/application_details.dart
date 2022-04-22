@@ -1,8 +1,12 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
+import 'package:ccalibre/core/utils/helpers.dart';
+import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/entities/variable.dart';
 import 'package:ccalibre/domain/entities/workflow.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
+import 'package:ccalibre/presentation/getx/build/controller.dart';
+import 'package:ccalibre/presentation/getx/home/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/build_item.dart';
 import 'package:ccalibre/presentation/widgets/app_scaffold.dart';
 import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
@@ -13,6 +17,7 @@ import 'package:get/get.dart';
 
 class ApplicationDetails extends StatelessWidget {
   final HomeController _homeController = Get.find<HomeController>();
+  final BuildController _buildController = Get.find<BuildController>();
 
   ApplicationDetails({Key? key}) : super(key: key);
 
@@ -53,7 +58,9 @@ class ApplicationDetails extends StatelessWidget {
                 ),
                 SizedBox(height: 6.0.wp),
                 _buildBranchesChips(
-                    textTheme, _homeController.application.value!.branches),
+                  textTheme,
+                  _homeController.application.value!.branches,
+                ),
                 SizedBox(height: 6.0.wp),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +76,7 @@ class ApplicationDetails extends StatelessWidget {
                       textTheme: textTheme,
                       title: 'Total Builds',
                       value:
-                          '${_homeController.application.value!.builds.length} builds',
+                          '${_buildController.applicationBuilds.length} builds',
                       icon: FontAwesomeIcons.wrench,
                     ),
                   ],
@@ -78,6 +85,7 @@ class ApplicationDetails extends StatelessWidget {
                 const SectionHeading(heading: 'Workflows', actionText: null),
                 SizedBox(height: 6.0.wp),
                 _buildWorkflowsList(
+                  context,
                   size,
                   textTheme,
                   _homeController.application.value!.workflows,
@@ -99,8 +107,10 @@ class ApplicationDetails extends StatelessWidget {
                   actionText: 'Start New',
                 ),
                 SizedBox(height: 6.0.wp),
-                _createBuildInfoTile(textTheme),
-                _createBuildInfoTile(textTheme),
+                ..._buildController.applicationBuilds
+                    .map<Widget>(
+                        (build) => _createBuildInfoTile(textTheme, build))
+                    .toList(),
               ],
             ),
           ),
@@ -110,11 +120,15 @@ class ApplicationDetails extends StatelessWidget {
     }
   }
 
-  Widget _createBuildInfoTile(TextTheme textTheme) {
+  Widget _createBuildInfoTile(TextTheme textTheme, Build build) {
+    final workflowName = _homeController.application.value!.workflows
+        .firstWhere((work) => work.id == build.workflowID)
+        .name;
+
     return Padding(
       padding: EdgeInsets.only(bottom: 6.0.wp),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             radius: 8.0.wp,
@@ -132,34 +146,37 @@ class ApplicationDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Build run on Workflow-1',
+                'Build run on $workflowName',
                 style: textTheme.headline6!.copyWith(
                   fontSize: 14.0.sp,
                 ),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
-                'Finished in 5m 48s',
+                '${Helpers.getBuildStatus(build.status)}5m 48s',
                 style: textTheme.subtitle2!.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.5,
                 ),
               ),
               Text(
-                'Run Again',
+                Helpers.getBuildActionButtonText(build.status),
                 style: textTheme.subtitle2!.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: primaryColor,
+                  color: Helpers.getBuildActionButtonColor(build.status),
                 ),
               ),
             ],
           ),
           const Spacer(),
           Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.bottomCenter,
             child: Text(
               'Apr 4th\n10:00 AM',
               style: textTheme.subtitle2!.copyWith(
                 fontWeight: FontWeight.w500,
+                fontSize: 10.0.sp,
               ),
               textAlign: TextAlign.end,
             ),
@@ -240,7 +257,16 @@ class ApplicationDetails extends StatelessWidget {
   }
 
   Widget _buildWorkflowsList(
-      Size size, TextTheme textTheme, List<Workflow> workflows) {
+    BuildContext context,
+    Size size,
+    TextTheme textTheme,
+    List<Workflow> workflows,
+  ) {
+    final int totalBuilds = _buildController.applicationBuilds.length;
+    final int buildSuccessCount = _buildController.applicationBuilds
+        .where((build) => build.status == 'finished')
+        .length;
+
     return SizedBox(
       height: size.height * 0.25,
       child: ListView.separated(
@@ -248,38 +274,50 @@ class ApplicationDetails extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemCount: workflows.length,
         separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
-        itemBuilder: (_, index) => RoundedCard(
-          cardTitle: workflows[index].name,
-          footerText: '3/5 successful builds',
-          footerIcon: FontAwesomeIcons.circleCheck,
-          cardBorderColor: accentColor,
-          cardBackgroundColor: cardBackgroundYellowColor,
-          centerChild: Align(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 6.0.wp,
-                  backgroundColor: accentColor,
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.play,
-                      color: Colors.white,
-                      size: 5.0.wp,
+        itemBuilder: (_, index) => InkWell(
+          onTap: () {
+            Get.find<UserController>()
+                .setSelectedWorkflowID(workflows[index].id);
+            _homeController.showStartBuildSheet(
+              context,
+              _homeController.application.value!,
+              shouldPresetWorkflow: true,
+              workflowName: workflows[index].name,
+            );
+          },
+          child: RoundedCard(
+            cardTitle: workflows[index].name,
+            footerText: '$buildSuccessCount/$totalBuilds successful builds',
+            footerIcon: FontAwesomeIcons.circleCheck,
+            cardBorderColor: accentColor,
+            cardBackgroundColor: cardBackgroundYellowColor,
+            centerChild: Align(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 6.0.wp,
+                    backgroundColor: accentColor,
+                    child: Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.play,
+                        color: Colors.white,
+                        size: 5.0.wp,
+                      ),
                     ),
                   ),
-                ),
-                FittedBox(
-                  child: Text(
-                    'Start New Build',
-                    style: textTheme.headline6!.copyWith(
-                      color: primaryButtonTextColor,
-                      fontSize: 14.0.sp,
-                      height: 1.4,
+                  FittedBox(
+                    child: Text(
+                      'Start New Build',
+                      style: textTheme.headline6!.copyWith(
+                        color: primaryButtonTextColor,
+                        fontSize: 14.0.sp,
+                        height: 1.4,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

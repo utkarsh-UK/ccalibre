@@ -31,28 +31,52 @@ extension FileSize on int {
 
 /// Returns time difference in ago format
 extension DateTimeExtension on DateTime {
-  String timeAgo({bool numericDates = false}) {
-    final date2 = DateTime.now();
-    final difference = date2.difference(this);
+  String getTimeAgoFromCurrent() {
+    final currentTime = DateTime.now();
+    final difference = currentTime.difference(this);
 
     if ((difference.inDays / 7).floor() >= 1) {
-      return (numericDates) ? '1 week ago' : 'a week';
+      return '${difference.inDays}d ${difference.inHours % 24}h ago';
     } else if (difference.inDays >= 2) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays}d ${difference.inHours % 24}h ago';
     } else if (difference.inDays >= 1) {
-      return (numericDates) ? '1 day ago' : 'yesterday';
+      return '${difference.inDays}d ago';
     } else if (difference.inHours >= 2) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours}h ${difference.inMinutes % 60}m ago';
     } else if (difference.inHours >= 1) {
-      return (numericDates) ? '1 hour ago' : 'an hour ago';
+      return '${difference.inHours}h ago';
     } else if (difference.inMinutes >= 2) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes}m ${difference.inMinutes % 60}s ago';
     } else if (difference.inMinutes >= 1) {
-      return (numericDates) ? '1 minute ago' : 'a minute ago';
+      return '${difference.inMinutes}m ago';
     } else if (difference.inSeconds >= 3) {
-      return '${difference.inSeconds} seconds ago';
+      return '${difference.inSeconds}s ago';
     } else {
       return 'Just now';
+    }
+  }
+
+  String getTimeDiffInAgo(DateTime startDate) {
+    final difference = this.difference(startDate);
+
+    if ((difference.inDays / 7).floor() >= 1) {
+      return '${difference.inDays}d ${difference.inHours % 24}h ago';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays}d ${difference.inHours % 24}h ago';
+    } else if (difference.inDays >= 1) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours}h ${difference.inMinutes % 60}m ago';
+    } else if (difference.inHours >= 1) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes}m ${difference.inMinutes % 60}s ago';
+    } else if (difference.inMinutes >= 1) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds}s ago';
+    } else {
+      return '${difference.inSeconds}s ago';
     }
   }
 }

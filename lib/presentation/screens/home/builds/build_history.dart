@@ -1,6 +1,7 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
+import 'package:ccalibre/core/utils/helpers.dart';
+import 'package:ccalibre/presentation/getx/build/controller.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/build_item.dart';
 import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:get/get.dart';
 import '../../../../core/utils/extensions.dart';
 
 class BuildHistory extends StatelessWidget {
-  final HomeController _homeController = Get.find<HomeController>();
+  final BuildController _buildController = Get.find<BuildController>();
 
   BuildHistory({Key? key}) : super(key: key);
 
@@ -31,19 +32,25 @@ class BuildHistory extends StatelessWidget {
             () => ListView.separated(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              itemCount: _homeController.builds.length,
+              itemCount: _buildController.allBuilds.length,
               separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
               itemBuilder: (_, index) {
-                final build = _homeController.builds[index];
-                final isFinished = build.status == 'finished';
-                final timeDiff = isFinished
-                    ? build.finishedAt.timeAgo()
-                    : build.startedAt.timeAgo();
-                final timeStatus = isFinished ? 'Finished' : 'Started';
+                final build = _buildController.allBuilds[index];
+                final timeDiff = Helpers.getBuildTimeFooter(
+                  build.status,
+                  build.startedAt,
+                  build.finishedAt,
+                );
+                final timeStatus =
+                    Helpers.getBuildHistoryFooterStatus(build.status);
 
                 return RoundedCard(
                   cardTitle: build.branch.toLowerCase(),
-                  footerText: '$timeStatus $timeDiff ago',
+                  footerText: '$timeStatus $timeDiff',
+                  cardBackgroundColor:
+                      Helpers.getCardBackgroundColorByBuildStatus(build.status),
+                  cardBorderColor:
+                      Helpers.getCardBorderColorByBuildStatus(build.status),
                   centerChild: Align(
                     alignment: Alignment.center,
                     child: RichText(
@@ -52,14 +59,14 @@ class BuildHistory extends StatelessWidget {
                           TextSpan(
                             text: '${build.status}\n'.toUpperCase(),
                             style: textTheme.headline5!.copyWith(
-                              color: isFinished ? logoRedColor : logoGreenColor,
+                              color: primaryTextColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
                             text: 'with ${build.artefactsCount} artefacts',
                             style: textTheme.button!.copyWith(
-                              color: isFinished ? logoRedColor : logoGreenColor,
+                              color: primaryTextColor,
                               fontSize: 10.0.sp,
                               height: 1.2,
                               fontWeight: FontWeight.w400,

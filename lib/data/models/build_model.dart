@@ -5,6 +5,7 @@ import 'package:ccalibre/domain/entities/build.dart';
 class BuildModel extends Build {
   final String id;
   final String applicationID;
+  final String workflowID;
   final String branch;
   final String instanceType;
   final String version;
@@ -16,6 +17,7 @@ class BuildModel extends Build {
   const BuildModel({
     required this.id,
     required this.applicationID,
+    required this.workflowID,
     required this.branch,
     this.instanceType = 'mac_mini',
     required this.version,
@@ -25,6 +27,7 @@ class BuildModel extends Build {
     required this.finishedAt,
   }) : super(
           applicationID: applicationID,
+          workflowID: workflowID,
           branch: branch,
           id: id,
           version: version,
@@ -41,6 +44,7 @@ class BuildModel extends Build {
   factory BuildModel.fromJSON(Map<String, dynamic> json) => BuildModel(
         id: '${json['_id']}',
         applicationID: '${json['appId']}',
+        workflowID: '${json['workflowId']}',
         branch: '${json['branch']}',
         version: '${json['version']}',
         status: '${json['status']}',

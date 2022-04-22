@@ -3,17 +3,19 @@ import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/data/services/storage_service.dart';
 import 'package:ccalibre/di/injection.dart';
 import 'package:ccalibre/presentation/screens/home/applications/application_details.dart';
-import 'package:ccalibre/presentation/screens/home/binding.dart';
 import 'package:ccalibre/presentation/screens/home/view.dart';
-import 'package:ccalibre/presentation/screens/onboard/bindings.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
 import 'package:ccalibre/presentation/screens/splash/splash_screen.dart';
-import 'package:ccalibre/presentation/screens/user/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
+import 'presentation/getx/build/binding.dart';
+import 'presentation/getx/home/binding.dart';
+import 'presentation/getx/onboard/bindings.dart';
+import 'presentation/getx/user/binding.dart';
 
 void main() async {
   await GetStorage.init();
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
           page: () => HomeScreen(),
           bindings: [
             HomeBinding(),
+            BuildBinding(),
             UserBinding(),
           ]
         ),

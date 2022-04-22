@@ -1,17 +1,14 @@
 import 'package:ccalibre/core/usecases/usecase.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
 import 'package:ccalibre/domain/entities/application.dart';
-import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/entities/user.dart';
 import 'package:ccalibre/domain/usecases/applications/create_new_app.dart';
 import 'package:ccalibre/domain/usecases/applications/get_all_apps.dart';
 import 'package:ccalibre/domain/usecases/applications/get_application.dart';
-import 'package:ccalibre/domain/usecases/builds/get_all_builds.dart';
-import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
+import 'package:ccalibre/presentation/getx/onboard/controller.dart';
 import 'package:ccalibre/presentation/screens/home/applications/add_app_sheet.dart';
-import 'package:ccalibre/presentation/screens/home/builds/start_build_sheet.dart';
 import 'package:ccalibre/presentation/screens/home/applications/update_var_sheet.dart';
-import 'package:ccalibre/presentation/screens/onboard/controller.dart';
+import 'package:ccalibre/presentation/screens/home/builds/start_build_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,27 +18,20 @@ class HomeController extends GetxController {
   final GetAllApplications _getAllApplications;
   final GetApplication _getApplication;
   final CreateNewApplication _createNewApplication;
-  final GetAllBuilds _getAllBuilds;
-  final StartNewBuild _startNewBuild;
 
   HomeController({
     required GetAllApplications getAllApplications,
-    required GetAllBuilds getAllBuilds,
     required GetApplication getApplication,
     required CreateNewApplication createNewApplication,
-    required StartNewBuild startNewBuild,
   })  : _getAllApplications = getAllApplications,
         _getApplication = getApplication,
-        _createNewApplication = createNewApplication,
-        _getAllBuilds = getAllBuilds,
-        _startNewBuild = startNewBuild;
+        _createNewApplication = createNewApplication;
 
   final areApplicationsAdded = false.obs;
   final isBuildInProgress = false.obs;
   final isSelectedAppLoading = false.obs;
 
   final applications = <Application>[].obs;
-  final builds = <Build>[].obs;
   final application = Rx<Application?>(null);
 
   final storedUser = Rx<User?>(null);
@@ -58,7 +48,6 @@ class HomeController extends GetxController {
 
     if (storedUser.value != null) {
       getApplications();
-      getBuilds();
     }
   }
 
@@ -74,21 +63,6 @@ class HomeController extends GetxController {
       (fetchedApplications) {
         areApplicationsAdded.value = fetchedApplications.isNotEmpty;
         applications.value = fetchedApplications;
-      },
-    );
-  }
-
-  Future<void> getBuilds() async {
-    if (token.value.isEmpty) return;
-
-    final failureOrBuilds = await _getAllBuilds(
-      Params(token: token.value),
-    );
-
-    failureOrBuilds.fold(
-      (failure) => debugPrint(Helpers.convertFailureToString(failure)),
-      (fetchedBuilds) {
-        builds.value = fetchedBuilds;
       },
     );
   }
@@ -127,26 +101,6 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> startBuild(String appID, String workID, String branch) async {
-    if (token.value.isEmpty) return;
-
-    final failureOrSuccess = await _startNewBuild(
-      Params(
-        token: token.value,
-        applicationID: appID,
-        workflowID: workID,
-        branch: branch,
-      ),
-    );
-
-    failureOrSuccess.fold(
-      (failure) => debugPrint(Helpers.convertFailureToString(failure)),
-      (_) {
-        isBuildInProgress.value = true;
-      },
-    );
-  }
-
   void setApplicationsAdded(bool value) => areApplicationsAdded.value = value;
 
   void resetCurrentApplication() => application.value = null;
@@ -161,13 +115,22 @@ class HomeController extends GetxController {
     );
   }
 
-  void showStartBuildSheet(BuildContext context, Application app) {
+  void showStartBuildSheet(
+    BuildContext context,
+    Application app, {
+    bool shouldPresetWorkflow = false,
+    String workflowName = 'Select Workflow',
+  }) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      builder: (_) => StartBuildSheet(application: app),
+      builder: (_) => StartBuildSheet(
+        application: app,
+        shouldPresetWorkflow: shouldPresetWorkflow,
+        selectedWorkflow: workflowName,
+      ),
     );
   }
 

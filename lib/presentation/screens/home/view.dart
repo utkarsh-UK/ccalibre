@@ -1,10 +1,10 @@
 import 'package:ccalibre/core/utils/extensions.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
+import 'package:ccalibre/presentation/getx/home/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:ccalibre/presentation/screens/home/applications/applications.dart';
 import 'package:ccalibre/presentation/screens/home/builds/build_history.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/empty_apps.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/live_build_status.dart';
-import 'package:ccalibre/presentation/screens/user/controller.dart';
 import 'package:ccalibre/presentation/widgets/app_scaffold.dart';
 import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/secondary_action_button.dart';

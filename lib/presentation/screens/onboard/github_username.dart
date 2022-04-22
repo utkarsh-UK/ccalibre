@@ -1,6 +1,6 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/routes.dart';
-import 'package:ccalibre/presentation/screens/onboard/controller.dart';
+import 'package:ccalibre/presentation/getx/onboard/controller.dart';
 import 'package:ccalibre/presentation/screens/onboard/widgets/onboard_scaffold.dart';
 import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';

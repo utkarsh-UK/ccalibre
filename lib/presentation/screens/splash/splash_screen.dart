@@ -1,4 +1,4 @@
-import 'package:ccalibre/presentation/screens/onboard/controller.dart';
+import 'package:ccalibre/presentation/getx/onboard/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,7 +1,7 @@
 import 'package:ccalibre/core/utils/constants.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
-import 'package:ccalibre/presentation/screens/home/controller.dart';
-import 'package:ccalibre/presentation/screens/user/controller.dart';
+import 'package:ccalibre/presentation/getx/home/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:ccalibre/presentation/widgets/dropdown_input.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';
 import 'package:flutter/material.dart';

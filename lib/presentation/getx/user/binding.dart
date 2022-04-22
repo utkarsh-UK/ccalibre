@@ -1,5 +1,5 @@
 import 'package:ccalibre/domain/usecases/user/get_public_repos.dart';
-import 'package:ccalibre/presentation/screens/user/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:get/get.dart';
 
 class UserBinding extends Bindings {
