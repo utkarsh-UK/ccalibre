@@ -1,5 +1,7 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
+import 'package:ccalibre/domain/entities/variable.dart';
+import 'package:ccalibre/domain/entities/workflow.dart';
 import 'package:ccalibre/presentation/screens/home/controller.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/build_item.dart';
 import 'package:ccalibre/presentation/widgets/app_scaffold.dart';
@@ -10,56 +12,102 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class ApplicationDetails extends StatelessWidget {
-  const ApplicationDetails({Key? key}) : super(key: key);
+  final HomeController _homeController = Get.find<HomeController>();
+
+  ApplicationDetails({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
 
-    return AppScaffold(
-      children: [
-        const CustomTopBar(),
-        SizedBox(height: 8.0.wp),
-        Text(
-          'Persuit-Mobile',
-          style: textTheme.headline5,
-        ),
-        SizedBox(height: 6.0.wp),
-        _buildBranchesChips(textTheme),
-        SizedBox(height: 6.0.wp),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Obx(() => _loadWidget(context, size, textTheme));
+  }
+
+  Widget _loadWidget(BuildContext context, Size size, TextTheme textTheme) {
+    final bool checker = _homeController.isSelectedAppLoading.value;
+
+    switch (checker) {
+      case true:
+        return const AppScaffold(
           children: [
-            _buildInfoWithIcon(
-              textTheme: textTheme,
-              title: 'Workflows',
-              value: '3',
-              icon: FontAwesomeIcons.atom,
-            ),
-            _buildInfoWithIcon(
-              textTheme: textTheme,
-              title: 'Total Builds',
-              value: '3 builds',
-              icon: FontAwesomeIcons.wrench,
+            Center(
+              child: CircularProgressIndicator(),
             ),
           ],
-        ),
-        SizedBox(height: 6.0.wp),
-        const SectionHeading(heading: 'Workflows', actionText: null),
-        SizedBox(height: 6.0.wp),
-        _buildWorkflowsList(size, textTheme),
-        SizedBox(height: 6.0.wp),
-        const SectionHeading(heading: 'Variables', actionText: 'Add New'),
-        SizedBox(height: 6.0.wp),
-        _buildVariable(textTheme, context),
-        SizedBox(height: 6.0.wp),
-        const SectionHeading(heading: 'Builds', actionText: 'Start New'),
-        SizedBox(height: 6.0.wp),
-        _createBuildInfoTile(textTheme),
-        _createBuildInfoTile(textTheme),
-      ],
-    );
+        );
+      case false:
+        return WillPopScope(
+          onWillPop: () async {
+            _homeController.resetCurrentApplication();
+            return true;
+          },
+          child: Obx(
+            () => AppScaffold(
+              children: [
+                const CustomTopBar(),
+                SizedBox(height: 8.0.wp),
+                Text(
+                  _homeController.application.value!.name,
+                  style: textTheme.headline5,
+                ),
+                SizedBox(height: 6.0.wp),
+                _buildBranchesChips(
+                    textTheme, _homeController.application.value!.branches),
+                SizedBox(height: 6.0.wp),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInfoWithIcon(
+                      textTheme: textTheme,
+                      title: 'Workflows',
+                      value:
+                          '${_homeController.application.value!.workflows.length}',
+                      icon: FontAwesomeIcons.atom,
+                    ),
+                    _buildInfoWithIcon(
+                      textTheme: textTheme,
+                      title: 'Total Builds',
+                      value:
+                          '${_homeController.application.value!.builds.length} builds',
+                      icon: FontAwesomeIcons.wrench,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6.0.wp),
+                const SectionHeading(heading: 'Workflows', actionText: null),
+                SizedBox(height: 6.0.wp),
+                _buildWorkflowsList(
+                  size,
+                  textTheme,
+                  _homeController.application.value!.workflows,
+                ),
+                SizedBox(height: 6.0.wp),
+                const SectionHeading(
+                  heading: 'Variables',
+                  actionText: 'Add New',
+                ),
+                SizedBox(height: 6.0.wp),
+                _buildVariable(
+                  textTheme,
+                  context,
+                  _homeController.application.value!.variables,
+                ),
+                SizedBox(height: 6.0.wp),
+                const SectionHeading(
+                  heading: 'Builds',
+                  actionText: 'Start New',
+                ),
+                SizedBox(height: 6.0.wp),
+                _createBuildInfoTile(textTheme),
+                _createBuildInfoTile(textTheme),
+              ],
+            ),
+          ),
+        );
+      default:
+        return const SizedBox.shrink();
+    }
   }
 
   Widget _createBuildInfoTile(TextTheme textTheme) {
@@ -121,69 +169,87 @@ class ApplicationDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildVariable(TextTheme textTheme, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(right: 3.0.wp),
-            padding: EdgeInsets.symmetric(
-              horizontal: 3.0.wp,
-              vertical: 3.0.wp,
-            ),
-            color: borderColor,
+  Widget _buildVariable(
+    TextTheme textTheme,
+    BuildContext context,
+    List<Variable> variables,
+  ) {
+    return variables.isEmpty
+        ? Align(
+            alignment: Alignment.center,
             child: Text(
-              'Variable 1',
-              style: textTheme.headline6!.copyWith(
-                fontWeight: FontWeight.w400,
-                fontSize: 14.0.sp,
-              ),
+              'No variables added. Create one.',
+              style: textTheme.subtitle2,
             ),
-          ),
-        ),
-        InkWell(
-          onTap: () => Get.find<HomeController>().showUpdateVarSheet(context),
-          child: Container(
-            margin: EdgeInsets.only(right: 3.0.wp),
-            padding: EdgeInsets.all(3.0.wp),
-            decoration: BoxDecoration(
-              color: borderColor,
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: FaIcon(
-              FontAwesomeIcons.pen,
-              size: 6.0.wp,
-              color: accentColor,
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(3.0.wp),
-          decoration: BoxDecoration(
-            color: borderColor,
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          child: FaIcon(
-            FontAwesomeIcons.trash,
-            size: 6.0.wp,
-            color: logoRedColor,
-          ),
-        ),
-      ],
-    );
+          )
+        : Column(
+            children: variables
+                .map<Widget>((variable) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 3.0.wp),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 3.0.wp,
+                              vertical: 3.0.wp,
+                            ),
+                            color: borderColor,
+                            child: Text(
+                              variable.variableKey,
+                              style: textTheme.headline6!.copyWith(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.0.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => Get.find<HomeController>()
+                              .showUpdateVarSheet(context),
+                          child: Container(
+                            margin: EdgeInsets.only(right: 3.0.wp),
+                            padding: EdgeInsets.all(3.0.wp),
+                            decoration: BoxDecoration(
+                              color: borderColor,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: FaIcon(
+                              FontAwesomeIcons.pen,
+                              size: 6.0.wp,
+                              color: accentColor,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(3.0.wp),
+                          decoration: BoxDecoration(
+                            color: borderColor,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: FaIcon(
+                            FontAwesomeIcons.trash,
+                            size: 6.0.wp,
+                            color: logoRedColor,
+                          ),
+                        ),
+                      ],
+                    ))
+                .toList(),
+          );
   }
 
-  Widget _buildWorkflowsList(Size size, TextTheme textTheme) {
+  Widget _buildWorkflowsList(
+      Size size, TextTheme textTheme, List<Workflow> workflows) {
     return SizedBox(
       height: size.height * 0.25,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: 5,
+        itemCount: workflows.length,
         separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
         itemBuilder: (_, index) => RoundedCard(
-          cardTitle: 'Workflow-1',
+          cardTitle: workflows[index].name,
           footerText: '3/5 successful builds',
           footerIcon: FontAwesomeIcons.circleCheck,
           cardBorderColor: accentColor,
@@ -266,20 +332,20 @@ class ApplicationDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildBranchesChips(TextTheme textTheme) {
+  Widget _buildBranchesChips(TextTheme textTheme, List<String> branches) {
     return Wrap(
       direction: Axis.horizontal,
       runSpacing: 1.0.wp,
       spacing: 4.0.wp,
       children: List<Widget>.generate(
-          5,
+          branches.length,
           (index) => Chip(
                 padding: EdgeInsets.symmetric(
                   horizontal: 2.0.wp,
                   vertical: 1.2.wp,
                 ),
                 label: Text(
-                  'master',
+                  branches[index],
                   style: textTheme.headline6!.copyWith(fontSize: 12.0.sp),
                 ),
                 backgroundColor: Colors.white,

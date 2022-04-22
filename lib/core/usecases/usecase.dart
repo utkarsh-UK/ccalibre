@@ -18,8 +18,10 @@ abstract class UseCase<Type, Params> {
 class Params extends Equatable {
   final String? token;
   final String? applicationID;
+  final String? repoURL;
   final String? workflowID;
   final String? buildID;
+  final String? branch;
   final String? variableKey;
   final String? variableValue;
   final User? user;
@@ -29,11 +31,13 @@ class Params extends Equatable {
   final UserParams userParams;
 
   const Params({
+    this.repoURL,
     this.token,
     this.user,
     this.applicationID,
     this.workflowID,
     this.buildID,
+    this.branch,
     this.tokenFile,
     this.githubUsername,
     this.variableKey,

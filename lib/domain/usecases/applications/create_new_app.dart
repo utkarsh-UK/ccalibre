@@ -10,6 +10,6 @@ class CreateNewApplication extends UseCase<void, Params> {
 
   @override
   Future<Either<Failure, void>> call(Params params) {
-    return _repository.getAllApplications(params.token!);
+    return _repository.createNewApplication(params.token!, params.repoURL!);
   }
 }

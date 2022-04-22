@@ -57,7 +57,7 @@ class BuildHistory extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: 'with 2 artefacts',
+                            text: 'with ${build.artefactsCount} artefacts',
                             style: textTheme.button!.copyWith(
                               color: isFinished ? logoRedColor : logoGreenColor,
                               fontSize: 10.0.sp,

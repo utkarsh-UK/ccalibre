@@ -34,7 +34,7 @@ class Applications extends StatelessWidget {
             separatorBuilder: (_, __) =>
                 const Divider(color: Color(0xFF16182C), thickness: 1.2),
             itemBuilder: (_, index) => ListTile(
-              onTap: () => Get.toNamed(Routes.applicationDetailsRoute),
+              onTap: () => _onAppClick(_homeController.applications[index].id),
               title: Text(
                 _homeController.applications[index].name,
                 style: textTheme.headline6!.copyWith(
@@ -50,7 +50,10 @@ class Applications extends StatelessWidget {
                 ),
               ),
               trailing: InkWell(
-                onTap: () => _homeController.showStartBuildSheet(context),
+                onTap: () => _homeController.showStartBuildSheet(
+                  context,
+                  _homeController.applications[index],
+                ),
                 child: CircleAvatar(
                   radius: 6.0.wp,
                   backgroundColor: accentColor,
@@ -68,5 +71,10 @@ class Applications extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _onAppClick(String appID) {
+    _homeController.getApplication(appID);
+    Get.toNamed(Routes.applicationDetailsRoute);
   }
 }

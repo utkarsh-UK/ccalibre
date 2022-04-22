@@ -11,11 +11,13 @@ class UserController extends GetxController {
   UserController(this._getPublicRepos);
 
   final repositories = <Repository>[].obs;
+  final selectedRepoURL = ''.obs;
+  final selectedWorkflowID = ''.obs;
+  final selectedBranch = ''.obs;
 
   Future<void> getPublicRepositories(String username) async {
-    final failureOrApplications = await _getPublicRepos(
-      Params(githubUsername: username)
-    );
+    final failureOrApplications =
+        await _getPublicRepos(Params(githubUsername: username));
 
     failureOrApplications.fold(
       (failure) => debugPrint(Helpers.convertFailureToString(failure)),
@@ -24,4 +26,10 @@ class UserController extends GetxController {
       },
     );
   }
+
+  void setSelectedRepoURL(String url) => selectedRepoURL.value = url;
+
+  void setSelectedWorkflowID(String work) => selectedWorkflowID.value = work;
+
+  void setSelectedBranch(String branch) => selectedBranch.value = branch;
 }

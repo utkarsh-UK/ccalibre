@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ccalibre/core/utils/exceptions.dart';
 import 'package:ccalibre/core/utils/failure.dart';
 import 'package:dio/dio.dart';
@@ -23,39 +25,45 @@ class Helpers {
     Map<String, dynamic>? queryParams,
     Map<String, dynamic>? headers,
     bool isResponseListType = false,
+    Map<String, dynamic> data = const {},
   }) async {
     try {
-      Response _response;
+    Response _response;
 
-      switch (type) {
-        case HttpRequestType.get:
-          _response = await dio.get(
-            path,
-            queryParameters: queryParams,
-            options: Options(headers: headers),
-          );
-          break;
+    switch (type) {
+      case HttpRequestType.get:
+        _response = await dio.get(
+          path,
+          queryParameters: queryParams,
+          options: Options(headers: headers),
+        );
+        break;
 
-        case HttpRequestType.post:
-          _response = await dio.post(path, queryParameters: queryParams);
-          break;
+      case HttpRequestType.post:
+        _response = await dio.post(
+          path,
+          queryParameters: queryParams,
+          options: Options(headers: headers),
+          data: jsonEncode(data),
+        );
+        break;
 
-        case HttpRequestType.delete:
-          _response = await dio.delete(path, queryParameters: queryParams);
-          break;
+      case HttpRequestType.delete:
+        _response = await dio.delete(path, queryParameters: queryParams);
+        break;
 
-        default:
-          return null;
-      }
+      default:
+        return null;
+    }
 
-      if (_response.statusCode == 200) {
-        // Response is of List Type. Convert to Map with added key [data].
-        if (isResponseListType) return {'data': _response.data};
+    if (_response.statusCode == 200) {
+      // Response is of List Type. Convert to Map with added key [data].
+      if (isResponseListType) return {'data': _response.data};
 
-        return _response.data as Map<String, dynamic>;
-      } else {
-        throw ServerException(message: _response.statusMessage!);
-      }
+      return _response.data as Map<String, dynamic>;
+    } else {
+      throw ServerException(message: _response.statusMessage!);
+    }
     } catch (e) {
       throw ServerException(message: e.toString());
     }

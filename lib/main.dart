@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: Routes.applicationDetailsRoute,
-          page: () => const ApplicationDetails(),
+          page: () => ApplicationDetails(),
         ),
       ],
     );

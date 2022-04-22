@@ -19,7 +19,8 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
     int page = 1,
   }) async {
     try {
-      _dio.options = BaseOptions(baseUrl: 'https://api.github.com/users/');
+      Dio dio = Dio(BaseOptions(baseUrl: 'https://api.github.com/users/'));
+      
       final queryParams = {
         'type': type,
         'sort': sort,
@@ -29,7 +30,7 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
       };
 
       final response = await Helpers.sendRequest(
-        _dio,
+        dio,
         HttpRequestType.get,
         '$username/repos',
         queryParams: queryParams,

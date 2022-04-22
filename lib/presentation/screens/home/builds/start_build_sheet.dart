@@ -1,29 +1,22 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
+import 'package:ccalibre/domain/entities/application.dart';
+import 'package:ccalibre/presentation/screens/home/controller.dart';
+import 'package:ccalibre/presentation/screens/user/controller.dart';
 import 'package:ccalibre/presentation/widgets/dropdown_input.dart';
 import 'package:ccalibre/presentation/widgets/primary_action_button.dart';
 import 'package:ccalibre/presentation/widgets/text_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-const List<String> _workflows = [
-  'Select Workflow',
-  'Workflow-1',
-  'Workflow-2',
-  'Workflow-3',
-  'Workflow-4',
-];
-
-const List<String> _branches = [
-  'Select Branch',
-  'master',
-  'dev',
-  'preprod',
-  'prod',
-];
+import 'package:get/get.dart';
 
 class StartBuildSheet extends StatelessWidget {
-  const StartBuildSheet({Key? key}) : super(key: key);
+  final Application application;
+
+  StartBuildSheet({Key? key, required this.application}) : super(key: key);
+
+  final HomeController _homeController = Get.find<HomeController>();
+  final UserController _userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +36,17 @@ class StartBuildSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4.0.wp),
-          const DropdownInput(values: _workflows),
+          DropdownInput(
+            values:
+                application.workflows.map<String>((work) => work.name).toList()
+                  ..insert(0, 'Select Workflow'),
+            onDropdownChanged: _onWorkflowDropDownChanged,
+          ),
           SizedBox(height: 4.0.wp),
-          const DropdownInput(values: _branches),
+          DropdownInput(
+            values: application.branches..insert(0, 'Select Branch'),
+            onDropdownChanged: _onBranchDropDownChanged,
+          ),
           SizedBox(height: 4.0.wp),
           Text(
             'Add environment variables (Optional)',
@@ -83,14 +84,41 @@ class StartBuildSheet extends StatelessWidget {
             alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
-              child: const PrimaryActionButton(
+              child: PrimaryActionButton(
                 label: 'Start Build',
                 iconData: FontAwesomeIcons.plus,
+                onClick: _onStartBuild,
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _onWorkflowDropDownChanged(String? changedWork) {
+    if (changedWork == null || changedWork == 'Select Workflow') return;
+
+    final selectedWork = application.workflows
+        .firstWhere((workflow) => workflow.name == changedWork);
+
+    _userController.setSelectedWorkflowID(selectedWork.id);
+  }
+
+  void _onBranchDropDownChanged(String? changedBranch) {
+    if (changedBranch == null || changedBranch == 'Select Branch') return;
+
+    _userController.setSelectedBranch(changedBranch);
+  }
+
+  void _onStartBuild() {
+    final selectedWorkID = _userController.selectedWorkflowID.value;
+    final selectedBranch = _userController.selectedBranch.value;
+
+    if (selectedWorkID.isEmpty || selectedBranch.isEmpty) return;
+
+    _homeController
+        .startBuild(application.id, selectedWorkID, selectedBranch)
+        .then((_) => Get.back());
   }
 }

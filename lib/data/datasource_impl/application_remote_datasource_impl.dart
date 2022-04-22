@@ -28,9 +28,24 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   }
 
   @override
-  Future<void> createNewApplication(String token, String repositoryURL) {
-    // TODO: implement createNewApplication
-    throw UnimplementedError();
+  Future<void> createNewApplication(String token, String repositoryURL) async {
+    try {
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.post,
+        '/apps',
+        headers: {'x-auth-token': token},
+        data: {'repositoryUrl': repositoryURL},
+      );
+
+      if (response!['appName'] == null || response['appName'].isEmpty) {
+        throw ServerException(message: 'Could not create new application.');
+      }
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override
@@ -71,7 +86,6 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
         headers: {'x-auth-token': token},
       );
 
-
       return (response!['builds'] as List<dynamic>)
           .map<BuildModel>((app) => BuildModel.fromJSON(app))
           .toList();
@@ -83,9 +97,22 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   }
 
   @override
-  Future<ApplicationModel> getApplication(String token, String applicationID) {
-    // TODO: implement getApplication
-    throw UnimplementedError();
+  Future<ApplicationModel> getApplication(
+      String token, String applicationID) async {
+    try {
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.get,
+        '/apps/$applicationID',
+        headers: {'x-auth-token': token},
+      );
+
+      return ApplicationModel.fromJSON(response!['application']);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override
@@ -98,9 +125,28 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   Future<void> startNewBuild(String token,
       {required String applicationID,
       required String workflowID,
-      String? branch}) {
-    // TODO: implement startNewBuild
-    throw UnimplementedError();
+      String? branch}) async {
+    try {
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.post,
+        '/builds',
+        headers: {'x-auth-token': token},
+        data: {
+          'appId': applicationID,
+          'workflowId': workflowID,
+          'branch': branch!,
+        },
+      );
+
+      if (response!['buildId'] == null || response['buildId'].isEmpty) {
+        throw ServerException(message: 'Could not start build at the moment');
+      }
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override

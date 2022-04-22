@@ -7,6 +7,7 @@ class Build extends Equatable {
   final String instanceType;
   final String version;
   final String status;
+  final int artefactsCount;
   final DateTime startedAt;
   final DateTime finishedAt;
 
@@ -17,6 +18,7 @@ class Build extends Equatable {
     this.instanceType = 'mac_mini',
     required this.version,
     required this.status,
+    required this.artefactsCount,
     required this.startedAt,
     required this.finishedAt,
   });
