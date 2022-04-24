@@ -17,6 +17,8 @@ class DropdownInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    debugPrint('$values');
+
     return DropdownButtonFormField<String>(
       value: values.first,
       onChanged: onDropdownChanged,

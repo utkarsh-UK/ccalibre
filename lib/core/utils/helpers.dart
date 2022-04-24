@@ -168,13 +168,32 @@ class Helpers {
   ) {
     switch (status) {
       case 'finished':
-        return end.getTimeAgoFromCurrent();
+        return end.getTimeDiff(start);
       case 'failed':
       case 'canceled':
       case 'building':
-        return end.getTimeDiffInAgo(start);
+        return end.getTimeAgoFromCurrent();
       default:
-        return end.getTimeDiffInAgo(start);
+        return end.getTimeAgoFromCurrent();
+    }
+  }
+
+  static String getBuildTime(
+    String status,
+    DateTime start,
+    DateTime end,
+  ) {
+    switch (status) {
+      case 'finished':
+      case 'failed':
+        return end.getTimeDiff(start);
+      case 'canceled':
+        return end.getTimeAgoFromCurrent();
+      case 'building':
+        return start.getTimeAgoFromCurrent();
+
+      default:
+        return start.getTimeAgoFromCurrent();
     }
   }
 }

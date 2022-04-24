@@ -13,18 +13,21 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SizedBox(
-          height: size.height - kToolbarHeight,
-          width: size.width,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.0.wp,
-                vertical: 4.0.wp,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: children,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SizedBox(
+            height: size.height - kToolbarHeight,
+            width: size.width,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.0.wp,
+                  vertical: 4.0.wp,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: children,
+                ),
               ),
             ),
           ),

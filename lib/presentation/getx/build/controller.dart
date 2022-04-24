@@ -4,11 +4,13 @@ import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/usecases/builds/get_all_builds.dart';
 import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
 import 'package:ccalibre/presentation/getx/home/controller.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class BuildController extends GetxController {
   late final HomeController _homeController;
+  late final TextEditingController variableKeyController;
+  late final TextEditingController variableValueController;
 
   final GetAllBuilds _getAllBuilds;
   final StartNewBuild _startNewBuild;
@@ -21,16 +23,27 @@ class BuildController extends GetxController {
 
   final allBuilds = <Build>[].obs;
   final applicationBuilds = <Build>[].obs;
+  final envVariables = <String, String>{}.obs;
 
   @override
   void onInit() {
     super.onInit();
 
     _homeController = Get.find<HomeController>();
+    variableKeyController = TextEditingController();
+    variableValueController = TextEditingController();
 
     if (_homeController.storedUser.value != null) {
       getBuilds();
     }
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+
+    variableKeyController.dispose();
+    variableValueController.dispose();
   }
 
   Future<void> getBuilds() async {
@@ -68,11 +81,11 @@ class BuildController extends GetxController {
 
     final failureOrSuccess = await _startNewBuild(
       Params(
-        token: _homeController.token.value,
-        applicationID: appID,
-        workflowID: workID,
-        branch: branch,
-      ),
+          token: _homeController.token.value,
+          applicationID: appID,
+          workflowID: workID,
+          branch: branch,
+          buildEnvironments: {'variables': envVariables}),
     );
 
     failureOrSuccess.fold(
@@ -81,5 +94,18 @@ class BuildController extends GetxController {
         _homeController.isBuildInProgress.value = true;
       },
     );
+  }
+
+  void addEnvVariable() {
+    if (variableKeyController.text.trim().isEmpty ||
+        variableValueController.text.trim().isEmpty) return;
+
+    envVariables.putIfAbsent(
+      variableKeyController.text.trim(),
+      () => variableValueController.text.trim(),
+    );
+
+    variableKeyController.clear();
+    variableValueController.clear();
   }
 }

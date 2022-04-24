@@ -15,6 +15,7 @@ class StartNewBuild extends UseCase<void, Params> {
       applicationID: params.applicationID!,
       workflowID: params.workflowID!,
       branch: params.branch!,
+      environment: params.buildEnvironments,
     );
   }
 }

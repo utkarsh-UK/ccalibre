@@ -79,4 +79,28 @@ extension DateTimeExtension on DateTime {
       return '${difference.inSeconds}s ago';
     }
   }
+
+  String getTimeDiff(DateTime startDate) {
+    final difference = this.difference(startDate);
+
+    if ((difference.inDays / 7).floor() >= 1) {
+      return '${difference.inDays}d ${difference.inHours % 24}h';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays}d ${difference.inHours % 24}h';
+    } else if (difference.inDays >= 1) {
+      return '${difference.inDays}d';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours}h ${difference.inMinutes % 60}m';
+    } else if (difference.inHours >= 1) {
+      return '${difference.inHours}h';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes}m ${difference.inMinutes % 60}s';
+    } else if (difference.inMinutes >= 1) {
+      return '${difference.inMinutes}m';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds}s';
+    } else {
+      return '${difference.inSeconds}s';
+    }
+  }
 }

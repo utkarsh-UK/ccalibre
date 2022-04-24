@@ -24,6 +24,7 @@ abstract class ApplicationRepository {
     required String applicationID,
     required String workflowID,
     String? branch,
+    Map<String, Object>? environment,
   });
 
   Future<Either<Failure, bool>> cancelBuild(String token,

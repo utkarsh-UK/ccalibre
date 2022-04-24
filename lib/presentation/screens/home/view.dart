@@ -18,30 +18,27 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      children: [
-        const CustomTopBar(),
-        SizedBox(height: 8.0.wp),
-        Obx(
-          () => _homeController.isBuildInProgress.value
-              ? const LiveBuildStatus()
+    
+    return Obx(() {
+      final bool isBuildInProgress = _homeController.isBuildInProgress.value;
+      final bool areApplicationsAdded =
+          _homeController.areApplicationsAdded.value;
+
+      return AppScaffold(
+        children: [
+          const CustomTopBar(),
+          SizedBox(height: 8.0.wp),
+          isBuildInProgress ? const LiveBuildStatus() : const SizedBox.shrink(),
+          isBuildInProgress
+              ? SizedBox(height: 8.0.wp)
               : const SizedBox.shrink(),
-        ),
-        SizedBox(height: 8.0.wp),
-        Obx(
-          () => _homeController.areApplicationsAdded.value
-              ? Applications()
-              : const EmptyApps(),
-        ),
-        SizedBox(height: 6.0.wp),
-        Obx(
-          () => _homeController.areApplicationsAdded.value
-              ? BuildHistory()
+          areApplicationsAdded ? Applications() : const EmptyApps(),
+          areApplicationsAdded
+              ? SizedBox(height: 6.0.wp)
               : const SizedBox.shrink(),
-        ),
-        SizedBox(height: 6.0.wp),
-        Obx(
-          () => _homeController.areApplicationsAdded.value
+          areApplicationsAdded ? BuildHistory() : const SizedBox.shrink(),
+          SizedBox(height: 6.0.wp),
+          areApplicationsAdded
               ? Container(
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
                   child: SecondaryActionButton(
@@ -51,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                       _userController.getPublicRepositories(
                         _homeController.storedUser.value!.githubUsername,
                       );
-                      
+
                       _homeController.showAddApplicationSheet(context);
                     },
                   ),
@@ -61,8 +58,8 @@ class HomeScreen extends StatelessWidget {
                   child:
                       const SecondaryActionButton(label: 'View Repositories'),
                 ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

@@ -118,10 +118,13 @@ class ApplicationRepositoryImpl extends ApplicationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> startNewBuild(String token,
-      {required String applicationID,
-      required String workflowID,
-      String? branch}) async {
+  Future<Either<Failure, void>> startNewBuild(
+    String token, {
+    required String applicationID,
+    required String workflowID,
+    String? branch,
+    Map<String, Object>? environment,
+  }) async {
     try {
       return Right(
         await _remoteDatasource.startNewBuild(

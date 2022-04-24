@@ -20,6 +20,7 @@ abstract class ApplicationRemoteDatasource {
     required String applicationID,
     required String workflowID,
     String? branch,
+     Map<String, Object>? environment,
   });
 
   Future<bool> cancelBuild(String token, {required String buildID});

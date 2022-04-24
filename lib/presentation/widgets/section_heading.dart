@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class SectionHeading extends StatelessWidget {
   final String heading;
   final String? actionText;
+  final VoidCallback? onActionTap;
 
   const SectionHeading({
     Key? key,
     required this.heading,
     required this.actionText,
+    this.onActionTap,
   }) : super(key: key);
 
   @override
@@ -23,10 +25,13 @@ class SectionHeading extends StatelessWidget {
           style: textTheme.headline5,
         ),
         if (actionText != null)
-          Text(
-            actionText ?? 'view all',
-            style: textTheme.subtitle2!.copyWith(
-              color: bodyTextColor,
+          InkWell(
+            onTap: onActionTap,
+            child: Text(
+              actionText ?? 'view all',
+              style: textTheme.subtitle2!.copyWith(
+                color: bodyTextColor,
+              ),
             ),
           ),
       ],

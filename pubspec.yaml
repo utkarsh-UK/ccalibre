@@ -25,6 +25,7 @@ dependencies:
 
   #ui
   font_awesome_flutter: ^10.1.0
+  intl: ^0.17.0
 
   #device
   file_picker: ^4.5.1

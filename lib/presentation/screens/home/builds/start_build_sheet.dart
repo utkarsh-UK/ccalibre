@@ -55,7 +55,7 @@ class StartBuildSheet extends StatelessWidget {
           ),
           SizedBox(height: 4.0.wp),
           DropdownInput(
-            values: application.branches..insert(0, 'Select Branch'),
+            values: ['Select Branch', ...application.branches],
             onDropdownChanged: _onBranchDropDownChanged,
           ),
           SizedBox(height: 4.0.wp),
@@ -64,15 +64,74 @@ class StartBuildSheet extends StatelessWidget {
             style: textTheme.bodyText2!.copyWith(fontSize: 14.0.sp),
           ),
           SizedBox(height: 3.0.wp),
+          Obx(
+            () => Column(
+              children: _buildController.envVariables.keys
+                  .map<Widget>((env) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 3.0.wp,
+                                bottom: 3.0.wp,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 3.0.wp,
+                                vertical: 3.0.wp,
+                              ),
+                              color: borderColor,
+                              child: Text(
+                                env,
+                                style: textTheme.headline6!.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 3.0.wp,
+                                bottom: 3.0.wp,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 3.0.wp,
+                                vertical: 3.0.wp,
+                              ),
+                              color: borderColor,
+                              child: Text(
+                                _buildController.envVariables[env]!,
+                                style: textTheme.headline6!.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ))
+                  .toList(),
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Flexible(child: TextInputField()),
+              Flexible(
+                child: TextInputField(
+                    controller: _buildController.variableKeyController,
+                    ),
+              ),
               SizedBox(width: 4.0.wp),
-              const Flexible(child: TextInputField()),
+              Flexible(
+                child: TextInputField(
+                    controller: _buildController.variableValueController,
+                    ),
+              ),
               SizedBox(width: 4.0.wp),
               OutlinedButton(
-                onPressed: null,
+                onPressed: _buildController.addEnvVariable,
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: primaryColor, width: 1.2),
                   shape: RoundedRectangleBorder(

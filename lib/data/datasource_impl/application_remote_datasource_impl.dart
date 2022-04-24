@@ -122,10 +122,13 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   }
 
   @override
-  Future<void> startNewBuild(String token,
-      {required String applicationID,
-      required String workflowID,
-      String? branch}) async {
+  Future<void> startNewBuild(
+    String token, {
+    required String applicationID,
+    required String workflowID,
+    String? branch,
+    Map<String, Object>? environment,
+  }) async {
     try {
       final response = await Helpers.sendRequest(
         _dio,
@@ -136,6 +139,7 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
           'appId': applicationID,
           'workflowId': workflowID,
           'branch': branch!,
+          'environment': environment,
         },
       );
 

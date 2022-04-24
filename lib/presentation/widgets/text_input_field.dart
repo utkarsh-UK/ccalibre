@@ -3,14 +3,16 @@ import 'package:ccalibre/core/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 class TextInputField extends StatelessWidget {
-  const TextInputField({Key? key}) : super(key: key);
+  final TextEditingController? controller;
+
+  const TextInputField({Key? key, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
     return TextFormField(
-      // controller: controller,
+      controller: controller,
       style: textTheme.bodyText2!.copyWith(
         fontSize: 12.0.sp,
         color: primaryTextColor,

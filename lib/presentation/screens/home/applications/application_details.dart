@@ -14,6 +14,7 @@ import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ApplicationDetails extends StatelessWidget {
   final HomeController _homeController = Get.find<HomeController>();
@@ -102,9 +103,13 @@ class ApplicationDetails extends StatelessWidget {
                   _homeController.application.value!.variables,
                 ),
                 SizedBox(height: 6.0.wp),
-                const SectionHeading(
+                SectionHeading(
                   heading: 'Builds',
                   actionText: 'Start New',
+                  onActionTap: () => _homeController.showStartBuildSheet(
+                    context,
+                    _homeController.application.value!,
+                  ),
                 ),
                 SizedBox(height: 6.0.wp),
                 ..._buildController.applicationBuilds
@@ -154,7 +159,7 @@ class ApplicationDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                '${Helpers.getBuildStatus(build.status)}5m 48s',
+                '${Helpers.getBuildStatus(build.status)}${Helpers.getBuildTime(build.status, build.startedAt, build.finishedAt)}',
                 style: textTheme.subtitle2!.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -173,7 +178,7 @@ class ApplicationDetails extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Text(
-              'Apr 4th\n10:00 AM',
+              '${DateFormat('MMM d').format(build.startedAt)}\n${DateFormat('jm').format(build.startedAt)}',
               style: textTheme.subtitle2!.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 10.0.sp,

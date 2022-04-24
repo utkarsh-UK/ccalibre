@@ -27,6 +27,7 @@ class Params extends Equatable {
   final User? user;
   final String? githubUsername;
   final File? tokenFile;
+  final Map<String, Object>? buildEnvironments;
 
   final UserParams userParams;
 
@@ -42,6 +43,7 @@ class Params extends Equatable {
     this.githubUsername,
     this.variableKey,
     this.variableValue,
+    this.buildEnvironments,
     this.userParams = const UserParams(),
   });
 
