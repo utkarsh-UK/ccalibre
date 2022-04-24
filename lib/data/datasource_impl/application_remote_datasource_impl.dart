@@ -26,7 +26,7 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
     try {
       await Helpers.sendRequest(
         _dio,
-        HttpRequestType.get,
+        HttpRequestType.post,
         '/builds/$buildID/cancel',
         headers: {'x-auth-token': token},
       );

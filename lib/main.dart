@@ -4,6 +4,7 @@ import 'package:ccalibre/data/services/storage_service.dart';
 import 'package:ccalibre/di/injection.dart';
 import 'package:ccalibre/presentation/screens/home/applications/all_apps.dart';
 import 'package:ccalibre/presentation/screens/home/applications/application_details.dart';
+import 'package:ccalibre/presentation/screens/home/builds/all_builds.dart';
 import 'package:ccalibre/presentation/screens/home/view.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
@@ -64,6 +65,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: Routes.allAppsRoute,
           page: () => AllAppsScreen(),
+        ),
+        GetPage(
+          name: Routes.allBuildsRoute,
+          page: () => AllBuildsScreen(),
         ),
         GetPage(
           name: Routes.allReposRoute,

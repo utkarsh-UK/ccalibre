@@ -1,6 +1,7 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
+import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/presentation/getx/build/controller.dart';
 import 'package:ccalibre/presentation/screens/home/widgets/build_item.dart';
 import 'package:ccalibre/presentation/widgets/section_heading.dart';
@@ -21,9 +22,10 @@ class BuildHistory extends StatelessWidget {
 
     return Column(
       children: [
-        const SectionHeading(
+        SectionHeading(
           heading: 'Build History',
           actionText: 'view all',
+          onActionTap: () => Get.toNamed(Routes.allBuildsRoute),
         ),
         SizedBox(height: 6.0.wp),
         SizedBox(
@@ -32,7 +34,9 @@ class BuildHistory extends StatelessWidget {
             () => ListView.separated(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              itemCount: _buildController.allBuilds.length,
+              itemCount: _buildController.allBuilds.length > 4
+                  ? 5
+                  : _buildController.allBuilds.length,
               separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
               itemBuilder: (_, index) {
                 final build = _buildController.allBuilds[index];

@@ -1,6 +1,7 @@
 import 'package:ccalibre/core/usecases/usecase.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
 import 'package:ccalibre/domain/entities/build.dart';
+import 'package:ccalibre/domain/usecases/builds/cancel_build.dart';
 import 'package:ccalibre/domain/usecases/builds/get_all_builds.dart';
 import 'package:ccalibre/domain/usecases/builds/get_build_status.dart';
 import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
@@ -17,14 +18,17 @@ class BuildController extends GetxController {
   final GetAllBuilds _getAllBuilds;
   final StartNewBuild _startNewBuild;
   final GetBuildStatus _getBuildStatus;
+  final CancelBuild _cancelBuild;
 
-  BuildController(
-      {required GetAllBuilds getAllBuilds,
-      required StartNewBuild startNewBuild,
-      required GetBuildStatus getBuildStatus})
-      : _getAllBuilds = getAllBuilds,
+  BuildController({
+    required GetAllBuilds getAllBuilds,
+    required StartNewBuild startNewBuild,
+    required GetBuildStatus getBuildStatus,
+    required CancelBuild cancelBuild,
+  })  : _getAllBuilds = getAllBuilds,
         _startNewBuild = startNewBuild,
-        _getBuildStatus = getBuildStatus;
+        _getBuildStatus = getBuildStatus,
+        _cancelBuild = cancelBuild;
 
   final allBuilds = <Build>[].obs;
   final applicationBuilds = <Build>[].obs;
@@ -88,6 +92,8 @@ class BuildController extends GetxController {
   Future<void> startBuild(String appID, String workID, String branch) async {
     if (_homeController.token.value.isEmpty) return;
 
+    debugPrint('$appID, $workID, $branch');
+
     final failureOrSuccess = await _startNewBuild(
       Params(
         token: _homeController.token.value,
@@ -124,6 +130,25 @@ class BuildController extends GetxController {
       (failure) => debugPrint(Helpers.convertFailureToString(failure)),
       (build) {
         activeBuild.value = build;
+      },
+    );
+  }
+
+  Future<void> cancelBuild(String buildID) async {
+    if (_homeController.token.value.isEmpty) return;
+
+    final failureOrSuccess = await _cancelBuild(
+      Params(
+        token: _homeController.token.value,
+        buildID: buildID,
+      ),
+    );
+
+    failureOrSuccess.fold(
+      (failure) => debugPrint(Helpers.convertFailureToString(failure)),
+      (_) {
+        debugPrint('Build cancelled successfully');
+        // activeBuild.value = build;
       },
     );
   }

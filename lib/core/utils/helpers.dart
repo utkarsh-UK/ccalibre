@@ -63,7 +63,7 @@ class Helpers {
         if (isResponseListType) return {'data': _response.data};
 
         return _response.data as Map<String, dynamic>;
-      } else if(_response.statusCode == 208) {
+      } else if (_response.statusCode == 208) {
         throw ServerException(message: 'Build has already finished');
       } else {
         throw ServerException(message: _response.statusMessage!);
@@ -126,7 +126,7 @@ class Helpers {
       case 'failed':
         return 'Failed, took ';
       case 'canceled':
-        return 'Cancelled';
+        return 'Cancelled ';
       case 'building':
         return '$status, started ';
 

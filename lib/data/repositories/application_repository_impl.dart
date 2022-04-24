@@ -131,6 +131,8 @@ class ApplicationRepositoryImpl extends ApplicationRepository {
           token,
           applicationID: applicationID,
           workflowID: workflowID,
+          branch: branch,
+          environment: environment,
         ),
       );
     } on ServerException catch (e) {

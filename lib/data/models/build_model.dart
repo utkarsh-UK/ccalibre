@@ -51,7 +51,7 @@ class BuildModel extends Build {
         artefactsCount: (json['artefacts'] as List<dynamic>).length,
         startedAt:
             DateTime.parse('${json['startedAt']}'.split('.').first + '+0000'),
-        finishedAt:
+        finishedAt:json['finishedAt'] == null ? DateTime.now() :
             DateTime.parse('${json['finishedAt']}'.split('.').first + '+0000'),
         instanceType: '${json['instanceType'] ?? 'mac_mini'}',
       );

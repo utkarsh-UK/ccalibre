@@ -50,73 +50,80 @@ class ApplicationDetails extends StatelessWidget {
           },
           child: Obx(
             () => AppScaffold(
-              children: [
-                const CustomTopBar(),
-                SizedBox(height: 8.0.wp),
-                Text(
-                  _homeController.application.value!.name,
-                  style: textTheme.headline5,
-                ),
-                SizedBox(height: 6.0.wp),
-                _buildBranchesChips(
-                  textTheme,
-                  _homeController.application.value!.branches,
-                ),
-                SizedBox(height: 6.0.wp),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildInfoWithIcon(
-                      textTheme: textTheme,
-                      title: 'Workflows',
-                      value:
-                          '${_homeController.application.value!.workflows.length}',
-                      icon: FontAwesomeIcons.atom,
-                    ),
-                    _buildInfoWithIcon(
-                      textTheme: textTheme,
-                      title: 'Total Builds',
-                      value:
-                          '${_buildController.applicationBuilds.length} builds',
-                      icon: FontAwesomeIcons.wrench,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 6.0.wp),
-                const SectionHeading(heading: 'Workflows', actionText: null),
-                SizedBox(height: 6.0.wp),
-                _buildWorkflowsList(
-                  context,
-                  size,
-                  textTheme,
-                  _homeController.application.value!.workflows,
-                ),
-                SizedBox(height: 6.0.wp),
-                const SectionHeading(
-                  heading: 'Variables',
-                  actionText: 'Add New',
-                ),
-                SizedBox(height: 6.0.wp),
-                _buildVariable(
-                  textTheme,
-                  context,
-                  _homeController.application.value!.variables,
-                ),
-                SizedBox(height: 6.0.wp),
-                SectionHeading(
-                  heading: 'Builds',
-                  actionText: 'Start New',
-                  onActionTap: () => _homeController.showStartBuildSheet(
-                    context,
-                    _homeController.application.value!,
-                  ),
-                ),
-                SizedBox(height: 6.0.wp),
-                ..._buildController.applicationBuilds
-                    .map<Widget>(
-                        (build) => _createBuildInfoTile(textTheme, build))
-                    .toList(),
-              ],
+              children: _homeController.application.value == null
+                  ? [
+                      const Center(
+                        child: Text('Closing...'),
+                      )
+                    ]
+                  : [
+                      const CustomTopBar(),
+                      SizedBox(height: 8.0.wp),
+                      Text(
+                        _homeController.application.value!.name,
+                        style: textTheme.headline5,
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      _buildBranchesChips(
+                        textTheme,
+                        _homeController.application.value!.branches,
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildInfoWithIcon(
+                            textTheme: textTheme,
+                            title: 'Workflows',
+                            value:
+                                '${_homeController.application.value!.workflows.length}',
+                            icon: FontAwesomeIcons.atom,
+                          ),
+                          _buildInfoWithIcon(
+                            textTheme: textTheme,
+                            title: 'Total Builds',
+                            value:
+                                '${_buildController.applicationBuilds.length} builds',
+                            icon: FontAwesomeIcons.wrench,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      const SectionHeading(
+                          heading: 'Workflows', actionText: null),
+                      SizedBox(height: 6.0.wp),
+                      _buildWorkflowsList(
+                        context,
+                        size,
+                        textTheme,
+                        _homeController.application.value!.workflows,
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      const SectionHeading(
+                        heading: 'Variables',
+                        actionText: 'Add New',
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      _buildVariable(
+                        textTheme,
+                        context,
+                        _homeController.application.value!.variables,
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      SectionHeading(
+                        heading: 'Builds',
+                        actionText: 'Start New',
+                        onActionTap: () => _homeController.showStartBuildSheet(
+                          context,
+                          _homeController.application.value!,
+                        ),
+                      ),
+                      SizedBox(height: 6.0.wp),
+                      ..._buildController.applicationBuilds
+                          .map<Widget>(
+                              (build) => _createBuildInfoTile(textTheme, build))
+                          .toList(),
+                    ],
             ),
           ),
         );
@@ -165,11 +172,24 @@ class ApplicationDetails extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
-              Text(
-                Helpers.getBuildActionButtonText(build.status),
-                style: textTheme.subtitle2!.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Helpers.getBuildActionButtonColor(build.status),
+              InkWell(
+                onTap: () {
+                  if (build.status == 'finished') {
+                    _buildController.startBuild(
+                      build.applicationID,
+                      build.workflowID,
+                      build.branch,
+                    );
+                  } else {
+                    _buildController.cancelBuild(build.id);
+                  }
+                },
+                child: Text(
+                  Helpers.getBuildActionButtonText(build.status),
+                  style: textTheme.subtitle2!.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Helpers.getBuildActionButtonColor(build.status),
+                  ),
                 ),
               ),
             ],
