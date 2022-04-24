@@ -2,11 +2,13 @@ import 'package:ccalibre/core/theme/theme.dart';
 import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/data/services/storage_service.dart';
 import 'package:ccalibre/di/injection.dart';
+import 'package:ccalibre/presentation/screens/home/applications/all_apps.dart';
 import 'package:ccalibre/presentation/screens/home/applications/application_details.dart';
 import 'package:ccalibre/presentation/screens/home/view.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
 import 'package:ccalibre/presentation/screens/splash/splash_screen.dart';
+import 'package:ccalibre/presentation/screens/user/repositories/all_repos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -58,6 +60,14 @@ class MyApp extends StatelessWidget {
             BuildBinding(),
             UserBinding(),
           ]
+        ),
+        GetPage(
+          name: Routes.allAppsRoute,
+          page: () => AllAppsScreen(),
+        ),
+        GetPage(
+          name: Routes.allReposRoute,
+          page: () => AllReposScreen(),
         ),
         GetPage(
           name: Routes.applicationDetailsRoute,

@@ -63,6 +63,8 @@ class Helpers {
         if (isResponseListType) return {'data': _response.data};
 
         return _response.data as Map<String, dynamic>;
+      } else if(_response.statusCode == 208) {
+        throw ServerException(message: 'Build has already finished');
       } else {
         throw ServerException(message: _response.statusMessage!);
       }

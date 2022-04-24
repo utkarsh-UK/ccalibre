@@ -1,4 +1,5 @@
 import 'package:ccalibre/core/utils/extensions.dart';
+import 'package:ccalibre/core/utils/routes.dart';
 import 'package:ccalibre/presentation/getx/home/controller.dart';
 import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:ccalibre/presentation/screens/home/applications/applications.dart';
@@ -10,6 +11,7 @@ import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/secondary_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.find<HomeController>();
@@ -18,7 +20,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    final size = MediaQuery.of(context).size;
+
     return Obx(() {
       final bool isBuildInProgress = _homeController.isBuildInProgress.value;
       final bool areApplicationsAdded =
@@ -39,6 +42,16 @@ class HomeScreen extends StatelessWidget {
           areApplicationsAdded ? BuildHistory() : const SizedBox.shrink(),
           SizedBox(height: 6.0.wp),
           areApplicationsAdded
+              ? const SizedBox.shrink()
+              : Center(
+                  child: SizedBox(
+                    width: size.width * 0.9,
+                    height: 50.0.hp,
+                    child: Lottie.asset('assets/anim/empty_apps.json'),
+                  ),
+                ),
+          SizedBox(height: 6.0.wp),
+          areApplicationsAdded
               ? Container(
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
                   child: SecondaryActionButton(
@@ -55,8 +68,14 @@ class HomeScreen extends StatelessWidget {
                 )
               : Container(
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
-                  child:
-                      const SecondaryActionButton(label: 'View Repositories'),
+                  child: SecondaryActionButton(
+                    label: 'View Repositories',
+                    onClick: () {
+                      Get.find<UserController>().getPublicRepositories(
+                          _homeController.storedUser.value!.githubUsername);
+                      Get.toNamed(Routes.allReposRoute);
+                    },
+                  ),
                 ),
         ],
       );

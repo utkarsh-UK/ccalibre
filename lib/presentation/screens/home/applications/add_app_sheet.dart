@@ -19,7 +19,12 @@ class AddAppSheet extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0.wp, vertical: 3.0.wp),
+      padding: EdgeInsets.only(
+        left: 8.0.wp,
+        right: 8.0.wp,
+        top: 3.0.wp,
+        bottom: 3.0.wp + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +66,7 @@ class AddAppSheet extends StatelessWidget {
             alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
-              child:  PrimaryActionButton(
+              child: PrimaryActionButton(
                 label: 'Add Application',
                 iconData: FontAwesomeIcons.plus,
                 onClick: _onAddApp,

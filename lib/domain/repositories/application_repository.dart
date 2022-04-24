@@ -19,7 +19,7 @@ abstract class ApplicationRepository {
     String? branch,
   });
 
-  Future<Either<Failure, void>> startNewBuild(
+  Future<Either<Failure, String>> startNewBuild(
     String token, {
     required String applicationID,
     required String workflowID,

@@ -2,6 +2,7 @@ import 'package:ccalibre/core/usecases/usecase.dart';
 import 'package:ccalibre/core/utils/helpers.dart';
 import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/usecases/builds/get_all_builds.dart';
+import 'package:ccalibre/domain/usecases/builds/get_build_status.dart';
 import 'package:ccalibre/domain/usecases/builds/start_new_build.dart';
 import 'package:ccalibre/presentation/getx/home/controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,21 +10,29 @@ import 'package:get/get.dart';
 
 class BuildController extends GetxController {
   late final HomeController _homeController;
+
   late final TextEditingController variableKeyController;
   late final TextEditingController variableValueController;
 
   final GetAllBuilds _getAllBuilds;
   final StartNewBuild _startNewBuild;
+  final GetBuildStatus _getBuildStatus;
 
-  BuildController({
-    required GetAllBuilds getAllBuilds,
-    required StartNewBuild startNewBuild,
-  })  : _getAllBuilds = getAllBuilds,
-        _startNewBuild = startNewBuild;
+  BuildController(
+      {required GetAllBuilds getAllBuilds,
+      required StartNewBuild startNewBuild,
+      required GetBuildStatus getBuildStatus})
+      : _getAllBuilds = getAllBuilds,
+        _startNewBuild = startNewBuild,
+        _getBuildStatus = getBuildStatus;
 
   final allBuilds = <Build>[].obs;
   final applicationBuilds = <Build>[].obs;
   final envVariables = <String, String>{}.obs;
+
+  final activeBuildId = ''.obs;
+  final activeApplicationId = ''.obs;
+  final activeBuild = Rx<Build?>(null);
 
   @override
   void onInit() {
@@ -81,17 +90,40 @@ class BuildController extends GetxController {
 
     final failureOrSuccess = await _startNewBuild(
       Params(
-          token: _homeController.token.value,
-          applicationID: appID,
-          workflowID: workID,
-          branch: branch,
-          buildEnvironments: {'variables': envVariables}),
+        token: _homeController.token.value,
+        applicationID: appID,
+        workflowID: workID,
+        branch: branch,
+        buildEnvironments: {'variables': envVariables},
+      ),
     );
 
     failureOrSuccess.fold(
       (failure) => debugPrint(Helpers.convertFailureToString(failure)),
-      (_) {
+      (buildId) {
         _homeController.isBuildInProgress.value = true;
+        activeBuildId.value = buildId;
+        activeApplicationId.value = appID;
+
+        getBuildStatus();
+      },
+    );
+  }
+
+  Future<void> getBuildStatus() async {
+    if (_homeController.token.value.isEmpty) return;
+
+    final failureOrSuccess = await _getBuildStatus(
+      Params(
+        token: _homeController.token.value,
+        buildID: activeBuildId.value,
+      ),
+    );
+
+    failureOrSuccess.fold(
+      (failure) => debugPrint(Helpers.convertFailureToString(failure)),
+      (build) {
+        activeBuild.value = build;
       },
     );
   }
@@ -107,5 +139,13 @@ class BuildController extends GetxController {
 
     variableKeyController.clear();
     variableValueController.clear();
+  }
+
+  void resetActiveBuild() {
+    activeBuildId.value = '';
+    activeApplicationId.value = '';
+    activeBuild.value = null;
+
+    _homeController.isBuildInProgress.value = false;
   }
 }

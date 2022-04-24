@@ -15,7 +15,7 @@ abstract class ApplicationRemoteDatasource {
     String? branch,
   });
 
-  Future<void> startNewBuild(
+  Future<String> startNewBuild(
     String token, {
     required String applicationID,
     required String workflowID,

@@ -118,7 +118,7 @@ class ApplicationRepositoryImpl extends ApplicationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> startNewBuild(
+  Future<Either<Failure, String>> startNewBuild(
     String token, {
     required String applicationID,
     required String workflowID,

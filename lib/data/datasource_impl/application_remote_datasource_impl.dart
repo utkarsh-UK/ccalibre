@@ -22,9 +22,21 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   }
 
   @override
-  Future<bool> cancelBuild(String token, {required String buildID}) {
-    // TODO: implement cancelBuild
-    throw UnimplementedError();
+  Future<bool> cancelBuild(String token, {required String buildID}) async {
+    try {
+      await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.get,
+        '/builds/$buildID/cancel',
+        headers: {'x-auth-token': token},
+      );
+
+      return true;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override
@@ -116,13 +128,26 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
   }
 
   @override
-  Future<BuildModel> getBuildStatus(String token, {required String buildID}) {
-    // TODO: implement getBuildStatus
-    throw UnimplementedError();
+  Future<BuildModel> getBuildStatus(String token,
+      {required String buildID}) async {
+    try {
+      final response = await Helpers.sendRequest(
+        _dio,
+        HttpRequestType.get,
+        '/builds/$buildID',
+        headers: {'x-auth-token': token},
+      );
+
+      return BuildModel.fromStatusJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 
   @override
-  Future<void> startNewBuild(
+  Future<String> startNewBuild(
     String token, {
     required String applicationID,
     required String workflowID,
@@ -146,6 +171,8 @@ class ApplicationRemoteDatasourceImpl extends ApplicationRemoteDatasource {
       if (response!['buildId'] == null || response['buildId'].isEmpty) {
         throw ServerException(message: 'Could not start build at the moment');
       }
+
+      return '${response['buildId']}';
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {

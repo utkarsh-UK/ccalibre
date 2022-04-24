@@ -1,7 +1,11 @@
 import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
+import 'package:ccalibre/core/utils/routes.dart';
+import 'package:ccalibre/presentation/getx/home/controller.dart';
+import 'package:ccalibre/presentation/getx/user/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class EmptyApps extends StatelessWidget {
   const EmptyApps({Key? key}) : super(key: key);
@@ -44,12 +48,21 @@ class EmptyApps extends StatelessWidget {
               ),
             ],
           ),
-          CircleAvatar(
-            radius: 8.0.wp,
-            backgroundColor: Colors.white,
-            child: const FaIcon(
-              FontAwesomeIcons.angleRight,
-              color: primaryColor,
+          InkWell(
+            onTap: () {
+              final homeController = Get.find<HomeController>();
+
+              Get.find<UserController>().getPublicRepositories(
+                  homeController.storedUser.value!.githubUsername);
+              Get.toNamed(Routes.allReposRoute);
+            },
+            child: CircleAvatar(
+              radius: 8.0.wp,
+              backgroundColor: Colors.white,
+              child: const FaIcon(
+                FontAwesomeIcons.angleRight,
+                color: primaryColor,
+              ),
             ),
           ),
         ],

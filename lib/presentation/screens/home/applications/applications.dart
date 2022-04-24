@@ -1,11 +1,9 @@
-import 'package:ccalibre/core/theme/colors.dart';
 import 'package:ccalibre/core/utils/extensions.dart';
 import 'package:ccalibre/core/utils/routes.dart';
-import 'package:ccalibre/presentation/getx/build/controller.dart';
 import 'package:ccalibre/presentation/getx/home/controller.dart';
+import 'package:ccalibre/presentation/screens/home/widgets/app_tile.dart';
 import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class Applications extends StatelessWidget {
@@ -17,8 +15,6 @@ class Applications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Obx(
       () => Column(
         children: [
@@ -26,57 +22,23 @@ class Applications extends StatelessWidget {
             SectionHeading(
               heading: 'Applications (${_homeController.applications.length})',
               actionText: 'view all',
+              onActionTap: () => Get.toNamed(Routes.allAppsRoute),
             ),
           SizedBox(height: 6.0.wp),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _homeController.applications.length,
+            itemCount: _homeController.applications.length > 4
+                ? 5
+                : _homeController.applications.length,
             separatorBuilder: (_, __) =>
                 const Divider(color: Color(0xFF16182C), thickness: 1.2),
-            itemBuilder: (_, index) => ListTile(
-              onTap: () => _onAppClick(_homeController.applications[index].id),
-              title: Text(
-                _homeController.applications[index].name,
-                style: textTheme.headline6!.copyWith(
-                  fontSize: 14.0.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              subtitle: Text(
-                '${_homeController.applications[index].workflows.length} workflows',
-                style: textTheme.subtitle2!.copyWith(
-                  fontSize: 12.0.sp,
-                  height: 2.0,
-                ),
-              ),
-              trailing: InkWell(
-                onTap: () => _homeController.showStartBuildSheet(
-                  context,
-                  _homeController.applications[index],
-                ),
-                child: CircleAvatar(
-                  radius: 6.0.wp,
-                  backgroundColor: accentColor,
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.play,
-                      color: Colors.white,
-                      size: 5.0.wp,
-                    ),
-                  ),
-                ),
-              ),
+            itemBuilder: (_, index) => AppTile(
+              application: _homeController.applications[index],
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _onAppClick(String appID) {
-    _homeController.getApplication(appID);
-    Get.find<BuildController>().getBuildsForApplication(appID);
-    Get.toNamed(Routes.applicationDetailsRoute);
   }
 }

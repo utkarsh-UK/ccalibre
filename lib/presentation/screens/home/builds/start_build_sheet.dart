@@ -30,7 +30,12 @@ class StartBuildSheet extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0.wp, vertical: 3.0.wp),
+      padding: EdgeInsets.only(
+        left: 8.0.wp,
+        right: 8.0.wp,
+        top: 3.0.wp,
+        bottom: 3.0.wp + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,14 +125,14 @@ class StartBuildSheet extends StatelessWidget {
             children: [
               Flexible(
                 child: TextInputField(
-                    controller: _buildController.variableKeyController,
-                    ),
+                  controller: _buildController.variableKeyController,
+                ),
               ),
               SizedBox(width: 4.0.wp),
               Flexible(
                 child: TextInputField(
-                    controller: _buildController.variableValueController,
-                    ),
+                  controller: _buildController.variableValueController,
+                ),
               ),
               SizedBox(width: 4.0.wp),
               OutlinedButton(

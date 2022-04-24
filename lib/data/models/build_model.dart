@@ -55,4 +55,19 @@ class BuildModel extends Build {
             DateTime.parse('${json['finishedAt']}'.split('.').first + '+0000'),
         instanceType: '${json['instanceType'] ?? 'mac_mini'}',
       );
+
+  factory BuildModel.fromStatusJSON(Map<String, dynamic> json) => BuildModel(
+        id: '${json['build']['_id']}',
+        applicationID: '${json['application']['_id']}',
+        workflowID: '${json['build']['workflowId']}',
+        branch: '${json['build']['branch']}',
+        version: '${json['build']['version']}',
+        status: '${json['build']['status']}',
+        artefactsCount: (json['build']['artefacts'] as List<dynamic>).length,
+        startedAt:
+            DateTime.parse('${json['build']['startedAt']}'.split('.').first + '+0000'),
+        finishedAt:
+            DateTime.parse('${json['build']['finishedAt']}'.split('.').first + '+0000'),
+        instanceType: '${json['build']['instanceType'] ?? 'mac_mini'}',
+      );
 }

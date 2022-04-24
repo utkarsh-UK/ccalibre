@@ -36,7 +36,7 @@ class OnboardController extends GetxController {
 
     ever(storedUser, (updatedUser) {
       if (updatedUser != null) {
-        Get.toNamed(Routes.homeRoute);
+        Get.offAllNamed(Routes.homeRoute);
       } else {
         Get.toNamed(Routes.uploadTokenRoute);
       }
