@@ -3,6 +3,7 @@ import 'package:ccalibre/domain/entities/repository.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UserRepository {
+  /// Returns list of public repositories for given [username].
   Future<Either<Failure, List<Repository>>> getPublicRepositories(String username, {
     String type = 'all',
     String sort = 'created',

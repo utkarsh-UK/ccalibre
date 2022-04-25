@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/utils/extensions.dart';
 
+/// Renders build history grids not more than 5.
 class BuildHistory extends StatelessWidget {
   final BuildController _buildController = Get.find<BuildController>();
 

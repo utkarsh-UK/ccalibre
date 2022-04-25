@@ -4,6 +4,10 @@ import 'package:ccalibre/domain/repositories/user_repository.dart';
 import 'package:ccalibre/domain/entities/repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Fetches all public repositories for given [githubUsername]
+///
+/// Required Params - [githubUsername].
+/// Optional Params - [type], [sort], [direction], [perPage], [page].
 class GetPublicRepos extends UseCase<List<Repository>, Params> {
   final UserRepository _repository;
 

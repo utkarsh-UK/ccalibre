@@ -4,6 +4,9 @@ import 'package:ccalibre/domain/entities/application.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Fetch specific application details for [applicationID].
+/// 
+/// Required Params - [token], [applicationID].
 class GetApplication extends UseCase<Application, Params> {
   final ApplicationRepository _repository;
 

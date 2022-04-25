@@ -1,4 +1,4 @@
-/// Custom class to catch ServerExceptions.
+/// Custom class to catch ServerExceptions. Deals with network/api calls.
 /// 
 /// [message] field provides reason of the exception in short.
 class ServerException implements Exception {
@@ -9,7 +9,7 @@ class ServerException implements Exception {
   });
 }
 
-/// Custom class to catch LocalExceptions.
+/// Custom class to catch LocalExceptions. Deals with device/local data management.
 /// 
 /// [message] field provides reason of the exception in short.
 class LocalException implements Exception {

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+/// Renders widget to setup applications.
 class EmptyApps extends StatelessWidget {
   const EmptyApps({Key? key}) : super(key: key);
 
@@ -49,13 +50,7 @@ class EmptyApps extends StatelessWidget {
             ],
           ),
           InkWell(
-            onTap: () {
-              final homeController = Get.find<HomeController>();
-
-              Get.find<UserController>().getPublicRepositories(
-                  homeController.storedUser.value!.githubUsername);
-              Get.toNamed(Routes.allReposRoute);
-            },
+            onTap: _onSetupClicked,
             child: CircleAvatar(
               radius: 8.0.wp,
               backgroundColor: Colors.white,
@@ -68,5 +63,13 @@ class EmptyApps extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _onSetupClicked() {
+    final homeController = Get.find<HomeController>();
+
+    Get.find<UserController>()
+        .getPublicRepositories(homeController.storedUser.value!.githubUsername);
+    Get.toNamed(Routes.allReposRoute);
   }
 }

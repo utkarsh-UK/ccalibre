@@ -3,6 +3,9 @@ import 'package:ccalibre/core/utils/failure.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Creates new application from [repositoryURL].
+/// 
+/// Required Params - [token], [repositoryURL].
 class CreateNewApplication extends UseCase<void, Params> {
   final ApplicationRepository _repository;
 

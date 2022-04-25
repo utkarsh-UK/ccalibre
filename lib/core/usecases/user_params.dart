@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+/// Class for holding user related params
 class UserParams extends Equatable {
   final String type;
   final String sort;

@@ -30,8 +30,12 @@ class BuildController extends GetxController {
         _getBuildStatus = getBuildStatus,
         _cancelBuild = cancelBuild;
 
+  /// Stores all builds for user
   final allBuilds = <Build>[].obs;
+
+  /// Stores application specific builds
   final applicationBuilds = <Build>[].obs;
+
   final envVariables = <String, String>{}.obs;
 
   final activeBuildId = ''.obs;
@@ -92,8 +96,6 @@ class BuildController extends GetxController {
   Future<void> startBuild(String appID, String workID, String branch) async {
     if (_homeController.token.value.isEmpty) return;
 
-    debugPrint('$appID, $workID, $branch');
-
     final failureOrSuccess = await _startNewBuild(
       Params(
         token: _homeController.token.value,
@@ -148,7 +150,9 @@ class BuildController extends GetxController {
       (failure) => debugPrint(Helpers.convertFailureToString(failure)),
       (_) {
         debugPrint('Build cancelled successfully');
-        // activeBuild.value = build;
+        activeBuild.value = null;
+        activeBuildId.value = '';
+        activeApplicationId.value = '';
       },
     );
   }

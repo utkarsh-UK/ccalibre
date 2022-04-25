@@ -1,3 +1,4 @@
+/// Holds route names for named routing.
 class Routes {
   static const String initialRoute = '/';
   static const String uploadTokenRoute = '/upload-token';

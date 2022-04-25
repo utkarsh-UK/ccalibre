@@ -4,6 +4,7 @@ import 'package:ccalibre/domain/repositories/onboard_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:ccalibre/core/utils/failure.dart';
 
+/// Retrieves user token and github username from local device.
 class GetUserData extends UseCase<User?, NoParams> {
   final OnboardRepository _repository;
 

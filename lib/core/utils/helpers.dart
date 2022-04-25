@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 enum HttpRequestType { get, post, delete }
 
 class Helpers {
+  /// Returns String [message] from [failure] object.
   static String convertFailureToString(Failure failure) {
     if (failure is ServerFailure) {
       return failure.message;
@@ -20,6 +21,19 @@ class Helpers {
     return "Unkown Error Occured";
   }
 
+  /// Sends request with [dio] object. Throws [ServerException] with [message] including the error reason.
+  ///
+  /// Accepts [type] for request type (get, post, delete).
+  /// 
+  /// [path] - appends given string to baseURl.
+  /// 
+  /// [queryParams] - query parameters to be passed.
+  /// 
+  /// [headers] - provides headers to the request.
+  /// 
+  /// [isResponseListType] -  Pass as true when API response is of type List<>. Method will return {'data': List<>} as final return.
+  /// 
+  /// [data] - JSON data to be passed to the request. Method will encode [data] with [jsonEncode].
   static Future<Map<String, dynamic>?> sendRequest(
     Dio dio,
     HttpRequestType type,
@@ -73,6 +87,7 @@ class Helpers {
     }
   }
 
+  /// Returns background color for build card depending on the [status].
   static Color getCardBackgroundColorByBuildStatus(String status) {
     switch (status) {
       case 'finished':
@@ -88,6 +103,7 @@ class Helpers {
     }
   }
 
+  /// Returns border color for build card depending on the [status].
   static Color getCardBorderColorByBuildStatus(String status) {
     switch (status) {
       case 'finished':
@@ -103,6 +119,7 @@ class Helpers {
     }
   }
 
+  /// Returns status message for build card depending on the [status].
   static String getBuildHistoryFooterStatus(String status) {
     switch (status) {
       case 'finished':
@@ -119,6 +136,7 @@ class Helpers {
     }
   }
 
+  /// Returns build status message for build tile depending on the [status].
   static String getBuildStatus(String status) {
     switch (status) {
       case 'finished':
@@ -135,6 +153,7 @@ class Helpers {
     }
   }
 
+  /// Returns action button text for build tile depending on the [status].
   static String getBuildActionButtonText(String status) {
     switch (status) {
       case 'finished':
@@ -149,6 +168,7 @@ class Helpers {
     }
   }
 
+  /// Returns action button color for build tile depending on the [status].
   static Color getBuildActionButtonColor(String status) {
     switch (status) {
       case 'finished':
@@ -163,6 +183,7 @@ class Helpers {
     }
   }
 
+  /// Returns action button color for build tile depending on the [status].
   static String getBuildTimeFooter(
     String status,
     DateTime start,
@@ -180,6 +201,9 @@ class Helpers {
     }
   }
 
+  /// Returns build time difference depending on the [status].
+  /// 
+  /// [start] and [end] date must not be null.
   static String getBuildTime(
     String status,
     DateTime start,

@@ -6,6 +6,8 @@ import 'package:ccalibre/presentation/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// Renders all applications.
+/// If [isHeadingShown] is false, title will not be rendered.
 class Applications extends StatelessWidget {
   final HomeController _homeController = Get.find<HomeController>();
 

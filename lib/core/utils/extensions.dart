@@ -31,6 +31,7 @@ extension FileSize on int {
 
 /// Returns time difference in ago format
 extension DateTimeExtension on DateTime {
+  /// Returns past time from current date.
   String getTimeAgoFromCurrent() {
     final currentTime = DateTime.now();
     final difference = currentTime.difference(this);
@@ -56,6 +57,9 @@ extension DateTimeExtension on DateTime {
     }
   }
 
+  /// Returns difference between start and end date in $time ago format.
+  /// 
+  /// Accepts [startDate] as starting date. Call on [endDate].
   String getTimeDiffInAgo(DateTime startDate) {
     final difference = this.difference(startDate);
 
@@ -80,6 +84,7 @@ extension DateTimeExtension on DateTime {
     }
   }
 
+  /// Returns time difference between start and end date in hh:mm format.
   String getTimeDiff(DateTime startDate) {
     final difference = this.difference(startDate);
 

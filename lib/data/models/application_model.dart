@@ -55,10 +55,6 @@ class ApplicationModel extends Application {
         branches: (json['branches'] as List<dynamic>)
             .map<String>((br) => '$br')
             .toList(),
-        // builds: (json['builds'] as List<dynamic>)
-        //     .map<BuildModel>((build) => BuildModel.fromJSON(build))
-        //     .toList(),
-        
         variables: (json['appEnvironmentVariables']['variables']
                 as List<dynamic>)
             .map<VariableModel>((variable) => VariableModel.fromJSON(variable))

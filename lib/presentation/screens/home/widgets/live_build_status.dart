@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+/// Widget for showing build status of active build.
 class LiveBuildStatus extends StatelessWidget {
   const LiveBuildStatus({Key? key}) : super(key: key);
 

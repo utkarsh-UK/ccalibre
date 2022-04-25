@@ -6,8 +6,7 @@ import 'package:ccalibre/domain/entities/variable.dart';
 import 'package:ccalibre/domain/entities/workflow.dart';
 import 'package:ccalibre/presentation/getx/build/controller.dart';
 import 'package:ccalibre/presentation/getx/home/controller.dart';
-import 'package:ccalibre/presentation/getx/user/controller.dart';
-import 'package:ccalibre/presentation/screens/home/widgets/build_item.dart';
+import 'package:ccalibre/presentation/screens/home/widgets/workflows_list.dart';
 import 'package:ccalibre/presentation/widgets/app_scaffold.dart';
 import 'package:ccalibre/presentation/widgets/custom_top_bar.dart';
 import 'package:ccalibre/presentation/widgets/section_heading.dart';
@@ -93,9 +92,6 @@ class ApplicationDetails extends StatelessWidget {
                           heading: 'Workflows', actionText: null),
                       SizedBox(height: 6.0.wp),
                       _buildWorkflowsList(
-                        context,
-                        size,
-                        textTheme,
                         _homeController.application.value!.workflows,
                       ),
                       SizedBox(height: 6.0.wp),
@@ -282,9 +278,6 @@ class ApplicationDetails extends StatelessWidget {
   }
 
   Widget _buildWorkflowsList(
-    BuildContext context,
-    Size size,
-    TextTheme textTheme,
     List<Workflow> workflows,
   ) {
     final int totalBuilds = _buildController.applicationBuilds.length;
@@ -292,61 +285,10 @@ class ApplicationDetails extends StatelessWidget {
         .where((build) => build.status == 'finished')
         .length;
 
-    return SizedBox(
-      height: size.height * 0.25,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: workflows.length,
-        separatorBuilder: (_, __) => SizedBox(width: 5.0.wp),
-        itemBuilder: (_, index) => InkWell(
-          onTap: () {
-            Get.find<UserController>()
-                .setSelectedWorkflowID(workflows[index].id);
-            _homeController.showStartBuildSheet(
-              context,
-              _homeController.application.value!,
-              shouldPresetWorkflow: true,
-              workflowName: workflows[index].name,
-            );
-          },
-          child: RoundedCard(
-            cardTitle: workflows[index].name,
-            footerText: '$buildSuccessCount/$totalBuilds successful builds',
-            footerIcon: FontAwesomeIcons.circleCheck,
-            cardBorderColor: accentColor,
-            cardBackgroundColor: cardBackgroundYellowColor,
-            centerChild: Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 6.0.wp,
-                    backgroundColor: accentColor,
-                    child: Center(
-                      child: FaIcon(
-                        FontAwesomeIcons.play,
-                        color: Colors.white,
-                        size: 5.0.wp,
-                      ),
-                    ),
-                  ),
-                  FittedBox(
-                    child: Text(
-                      'Start New Build',
-                      style: textTheme.headline6!.copyWith(
-                        color: primaryButtonTextColor,
-                        fontSize: 14.0.sp,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+    return WorkflowsList(
+      workflows: workflows,
+      totalBuilds: totalBuilds,
+      buildSuccessCount: buildSuccessCount,
     );
   }
 

@@ -3,6 +3,9 @@ import 'package:ccalibre/core/utils/failure.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Add new application variable.
+/// 
+/// Required Params - [token], [applicationID], [workflowID], [key], [value].
 class AddVariable extends UseCase<void, Params> {
   final ApplicationRepository _repository;
 

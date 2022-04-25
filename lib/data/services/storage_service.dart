@@ -26,10 +26,12 @@ class SecuredStorageService extends GetxService {
     await _box.write(key, value);
   }
 
+  /// Writes to secured storage with encrypted [key] and [value].
   Future<void> writeSecured<T>(String key, String value) async {
     return _secureStorage.write(key: key, value: value);
   }
 
+  /// Reads from secured storage with given [key]. Returns null if no key found.
   Future<String?> readSecured(String key) async {
     return _secureStorage.read(key: key);
   }

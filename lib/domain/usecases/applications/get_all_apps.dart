@@ -4,6 +4,9 @@ import 'package:ccalibre/domain/entities/application.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Fetch all applications for user.
+/// 
+/// Required Params - [token].
 class GetAllApplications extends UseCase<List<Application>, Params> {
   final ApplicationRepository _repository;
 

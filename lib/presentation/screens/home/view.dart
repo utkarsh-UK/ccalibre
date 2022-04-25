@@ -56,29 +56,33 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
                   child: SecondaryActionButton(
                     label: 'Create New Application',
-                    onClick: () {
-                      final _userController = Get.find<UserController>();
-                      _userController.getPublicRepositories(
-                        _homeController.storedUser.value!.githubUsername,
-                      );
-
-                      _homeController.showAddApplicationSheet(context);
-                    },
+                    onClick: () => _onCreateAppClicked(context),
                   ),
                 )
               : Container(
                   margin: EdgeInsets.symmetric(horizontal: 6.0.wp),
                   child: SecondaryActionButton(
                     label: 'View Repositories',
-                    onClick: () {
-                      Get.find<UserController>().getPublicRepositories(
-                          _homeController.storedUser.value!.githubUsername);
-                      Get.toNamed(Routes.allReposRoute);
-                    },
+                    onClick: _onViewReposClicked,
                   ),
                 ),
         ],
       );
     });
+  }
+
+  void _onCreateAppClicked(BuildContext context) {
+    final _userController = Get.find<UserController>();
+    _userController.getPublicRepositories(
+      _homeController.storedUser.value!.githubUsername,
+    );
+
+    _homeController.showAddApplicationSheet(context);
+  }
+
+  void _onViewReposClicked() {
+    Get.find<UserController>().getPublicRepositories(
+        _homeController.storedUser.value!.githubUsername);
+    Get.toNamed(Routes.allReposRoute);
   }
 }

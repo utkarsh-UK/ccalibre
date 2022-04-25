@@ -3,6 +3,9 @@ import 'package:ccalibre/core/utils/failure.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Cancels build for [buildID].
+/// 
+/// Required Params - [token], [buildID].
 class CancelBuild extends UseCase<bool, Params> {
   final ApplicationRepository _repository;
 

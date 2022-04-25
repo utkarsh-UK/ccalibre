@@ -4,6 +4,9 @@ import 'package:ccalibre/domain/entities/build.dart';
 import 'package:ccalibre/domain/repositories/application_repository.dart';
 import 'package:dartz/dartz.dart';
 
+/// Fetch build status for [buildID].
+///
+/// Required Params - [token], [buildID].
 class GetBuildStatus extends UseCase<Build, Params> {
   final ApplicationRepository _repository;
 
