@@ -14,6 +14,10 @@ class StoreUserData extends UseCase<User, Params> {
 
   @override
   Future<Either<Failure, User>> call(Params params) {
-    return _repository.storeUserData(params.tokenFile!, params.githubUsername!);
+    return _repository.storeUserData(
+      params.tokenFile!,
+      params.githubUsername!,
+      token: params.token,
+    );
   }
 }

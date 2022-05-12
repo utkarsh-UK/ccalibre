@@ -14,9 +14,9 @@ class OnboardRepositoryImpl extends OnboardRepository {
 
   @override
   Future<Either<Failure, User>> storeUserData(
-      File file, String username) async {
+      File file, String username, {String? token}) async {
     try {
-      return Right(await _localDatasource.storeUserData(file, username));
+      return Right(await _localDatasource.storeUserData(file, username, token: token));
     } on LocalException catch (e) {
       return Left(LocalFailure(message: e.message));
     }

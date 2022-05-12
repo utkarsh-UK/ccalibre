@@ -27,6 +27,8 @@ class HomeController extends GetxController {
         _getApplication = getApplication,
         _createNewApplication = createNewApplication;
 
+  late final TextEditingController usernameController;
+
   final areApplicationsAdded = false.obs;
   final isBuildInProgress = false.obs;
   final isSelectedAppLoading = false.obs;
@@ -42,13 +44,22 @@ class HomeController extends GetxController {
     super.onInit();
 
     _onboardController = Get.find<OnboardController>();
+    usernameController = TextEditingController();
 
     storedUser.value = _onboardController.storedUser.value;
+    usernameController.text = storedUser.value?.githubUsername ?? '';
     token.value = _onboardController.storedUser.value?.token ?? '';
 
     if (storedUser.value != null) {
       getApplications();
     }
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+
+    usernameController.dispose();
   }
 
   Future<void> getApplications() async {
@@ -145,5 +156,9 @@ class HomeController extends GetxController {
       ),
       builder: (_) => const UpdateVarSheet(),
     );
+  }
+
+  void setUsername() {
+    usernameController.text = storedUser.value?.githubUsername ?? '';
   }
 }

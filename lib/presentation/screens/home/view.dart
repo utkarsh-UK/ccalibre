@@ -29,7 +29,12 @@ class HomeScreen extends StatelessWidget {
 
       return AppScaffold(
         children: [
-          const CustomTopBar(),
+          CustomTopBar(
+            onMainBarIconClick: () {
+              _homeController.setUsername();
+              Get.toNamed(Routes.settingsRoute);
+            },
+          ),
           SizedBox(height: 8.0.wp),
           isBuildInProgress ? const LiveBuildStatus() : const SizedBox.shrink(),
           isBuildInProgress

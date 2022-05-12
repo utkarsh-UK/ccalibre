@@ -14,6 +14,7 @@ class OnboardBinding extends Bindings {
         storeUserData: storeUserData,
         getUserData: getUserData,
       ),
+      fenix: true,
     );
   }
 }

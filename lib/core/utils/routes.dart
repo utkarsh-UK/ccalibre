@@ -8,4 +8,5 @@ class Routes {
   static const String applicationDetailsRoute = '/app-details';
   static const String allReposRoute = '/all-repositories';
   static const String allBuildsRoute = '/all-builds';
+  static const String settingsRoute = '/settings';
 }

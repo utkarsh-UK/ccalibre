@@ -13,11 +13,19 @@ class LocalDatasourceImpl extends LocalDatasource {
   LocalDatasourceImpl(this._securedStorageService);
 
   @override
-  Future<UserModel> storeUserData(File file, String username) async {
+  Future<UserModel> storeUserData(File file, String username,
+      {String? token}) async {
     try {
-      final String fileContents = file.readAsStringSync();
-      final String token = fileContents.trim();
-      final user = UserModel.fromRaw(token, username);
+      late String finalToken;
+
+      if (token != null) {
+        finalToken = token;
+      } else {
+        final String fileContents = file.readAsStringSync();
+        finalToken = fileContents.trim();
+      }
+      
+      final user = UserModel.fromRaw(finalToken, username);
 
       await _securedStorageService.writeSecured(
         Constants.apiTokenKey,

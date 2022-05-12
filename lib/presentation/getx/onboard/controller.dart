@@ -56,8 +56,29 @@ class OnboardController extends GetxController {
       return;
     }
 
-    final failureOrUser = await _storeUserData(Params(
-        tokenFile: tokenFile.value, githubUsername: controller.text.trim()));
+    final failureOrUser = await _storeUserData(
+      Params(
+        tokenFile: tokenFile.value,
+        githubUsername: controller.text.trim(),
+      ),
+    );
+
+    failureOrUser.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToString(failure);
+      },
+      (user) => storedUser.value = user,
+    );
+  }
+
+  Future<void> updateTokenAndUsername({required String username, required String token}) async {
+      final failureOrUser = await _storeUserData(
+      Params(
+        tokenFile: File('/'),
+        githubUsername: username,
+        token: token,
+      ),
+    );
 
     failureOrUser.fold(
       (failure) {

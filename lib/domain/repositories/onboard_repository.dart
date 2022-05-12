@@ -6,7 +6,9 @@ import 'package:dartz/dartz.dart';
 
 abstract class OnboardRepository {
   /// Extractes token from given [file] and stores token and github [username] in device.
-  Future<Either<Failure, User>> storeUserData(File file, String username);
+  /// 
+  /// If [token] is non-null, [file] will be ignored and [token] will be stored directly.
+  Future<Either<Failure, User>> storeUserData(File file, String username, {String? token});
   
   /// Retrieves token and github username from device. Returns null if no user found.
   Future<Either<Failure, User?>> getUserData();

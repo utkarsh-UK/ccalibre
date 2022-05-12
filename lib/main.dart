@@ -8,6 +8,7 @@ import 'package:ccalibre/presentation/screens/home/builds/all_builds.dart';
 import 'package:ccalibre/presentation/screens/home/view.dart';
 import 'package:ccalibre/presentation/screens/onboard/github_username.dart';
 import 'package:ccalibre/presentation/screens/onboard/upload_token.dart';
+import 'package:ccalibre/presentation/screens/settings/view.dart';
 import 'package:ccalibre/presentation/screens/splash/splash_screen.dart';
 import 'package:ccalibre/presentation/screens/user/repositories/all_repos.dart';
 import 'package:flutter/material.dart';
@@ -53,15 +54,11 @@ class MyApp extends StatelessWidget {
           page: () => const UploadToken(),
         ),
         GetPage(name: Routes.githubUsernameRoute, page: () => GithubUsername()),
-        GetPage(
-          name: Routes.homeRoute,
-          page: () => HomeScreen(),
-          bindings: [
-            HomeBinding(),
-            BuildBinding(),
-            UserBinding(),
-          ]
-        ),
+        GetPage(name: Routes.homeRoute, page: () => HomeScreen(), bindings: [
+          HomeBinding(),
+          BuildBinding(),
+          UserBinding(),
+        ]),
         GetPage(
           name: Routes.allAppsRoute,
           page: () => AllAppsScreen(),
@@ -77,6 +74,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: Routes.applicationDetailsRoute,
           page: () => ApplicationDetails(),
+        ),
+        GetPage(
+          name: Routes.settingsRoute,
+          page: () => SettingsScreen(),
         ),
       ],
     );

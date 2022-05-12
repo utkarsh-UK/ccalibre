@@ -7,6 +7,8 @@ import '../../core/utils/extensions.dart';
 
 class CustomTopBar extends StatelessWidget {
   final bool showMainBar;
+  final IconData mainBarIcon;
+  final VoidCallback? onMainBarIconClick;
   final double iconSize = 8.0;
   final bool isRightChildShown;
   final bool isLeftChildShown;
@@ -14,6 +16,8 @@ class CustomTopBar extends StatelessWidget {
   const CustomTopBar({
     Key? key,
     this.showMainBar = true,
+    this.mainBarIcon = FontAwesomeIcons.gear,
+    this.onMainBarIconClick,
     this.isRightChildShown = true,
     this.isLeftChildShown = true,
   }) : super(key: key);
@@ -44,9 +48,9 @@ class CustomTopBar extends StatelessWidget {
         style: textTheme.headline3!.copyWith(color: accentColor),
       ),
       InkWell(
-        onTap: null,
+        onTap: onMainBarIconClick,
         child: FaIcon(
-          FontAwesomeIcons.gear,
+          mainBarIcon,
           color: iconColor,
           size: iconSize.wp,
         ),

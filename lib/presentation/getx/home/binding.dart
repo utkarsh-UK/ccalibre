@@ -17,6 +17,7 @@ class HomeBinding extends Bindings {
         getApplication: getApplication,
         createNewApplication: createNewApplication,
       ),
+      fenix: true,
     );
   }
 }
